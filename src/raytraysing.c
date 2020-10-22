@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:02:27 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 04:43:27 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/22 05:34:08 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void		shading(t_rt *rt)
 		{
 			rt->ray.x = pixel.x - (WIN_WIDTH * 0.5);
 			dir = normalize(subtraction3(rt->ray, rt->cam));
+			coleidoscope(rt, pixel, dir);
 			pixel_shader(rt, pixel, dir);
 			pixel.x++;
 		}

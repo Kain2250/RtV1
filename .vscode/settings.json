@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "sdl2": "c",
+        "__locale": "c"
+    }
+}

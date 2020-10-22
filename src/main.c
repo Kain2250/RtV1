@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 04:30:04 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/22 05:18:18 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,18 @@ void	rt_free(t_rt *rt)
 
 void	init_cam(t_rt *rt)
 {
-	rt->sphere.center = (t_vec3){.x = 0, .y = 0, .z = 20};
+	rt->sphere.center = (t_vec3){.x = 0., .y = 0., .z = 10.};
 	rt->sphere.color = (t_color){.red = 200, .green = 100, .blue = 50};
-	rt->sphere.rad = 10.f;
+	rt->sphere.rad = 5.f;
 	rt->sphere.type = SPHERE;
 
-	rt->light = (t_vec3){.x = 500, .y = 200, .z = 0};
+	rt->light = (t_vec3){.x = 500., .y = 200., .z = 0.};
 	
-	rt->cam = (t_vec3){.x = 0., .y = 0., .z = 10.};
-	rt->ray.z = 100;
+	rt->cam = (t_vec3){.x = 0., .y = 0., .z = 0.};
+	rt->ray.z = 500;
+	rt->ray.x = 0;
+	rt->ray.y = 0;
+
 }
 
 int		main(void)

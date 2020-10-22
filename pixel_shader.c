@@ -6,11 +6,12 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 05:27:22 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/22 04:42:24 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
 
 void				clear_surface(SDL_Surface *surface, Uint32 color)
 {
@@ -64,6 +65,23 @@ void				putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 		*(Uint32 *)p = pixel;
 }
 
+t_color		mix_color(t_color color, float intensity)
+{
+	t_color	mix;
+
+	mix.red = color.red * intensity;
+	mix.green = color.green * intensity;
+	mix.blue = color.blue * intensity;
+	return (mix);
+}
+
+float		light(t_vec3 intersect, t_vec3 l_point, t_vec3 norm)
+{
+	t_vec3	lvec;
+
+	lvec = normalize(subtraction3(l_point, intersect));
+	return (0.2 + clamp(dot3(lvec, norm), 0, 1));
+}
 
 float		sphere_intersect(float rad, t_vec3 center, t_vec3 cam, t_vec3 direction)
 {
@@ -84,65 +102,20 @@ float		sphere_intersect(float rad, t_vec3 center, t_vec3 cam, t_vec3 direction)
 	return (t1 < t2 ? t1 : t2);
 }
 
-t_color		mix_color(t_color color, float intensity)
-{
-	t_color	mix;
-
-	mix.red = color.red * intensity;
-	mix.green = color.green * intensity;
-	mix.blue = color.blue * intensity;
-	return (mix);
-}
-
-
-float		light(t_vec3 p, t_vec3 l, t_vec3 n)
-{
-	t_vec3	lv;
-
-	lv = normalize(subtraction3(l, p));
-	return (0.25 + clamp(dot3(lv, n), 0, 1));
-}
-
-void		coleidoscope(t_rt *rt, t_point pixel, t_vec3 a)
-{
-	t_vec3	dir;
-	float	t0;
-	(void)a;
-
-	float	radius = 20.f;
-	t_vec3	center = (t_vec3){.x = 0.f, .y = 0.f, .z = 20.f};
-	t_vec3	cam = (t_vec3){.x = 0, .y = 0, .z = 0};
-	// t_vec3	temp = (t_vec3){.x = pixel.x, .y = pixel.y, 1};
-	t_vec3 lp = (t_vec3){.x = 0, .y = 0, .z = 0};;
-
-	dir = normalize(subtraction3(a, cam));
-	t0 = sphere_intersect(radius, center, cam, dir);
-	if (t0 >= 0)
-	{
-		
-		t_vec3 temp1 = (t_vec3){.x = dir.x * t0, .y = dir.y * t0, .z = dir.z * t0};
-		t_vec3 inter = addition3(cam, temp1);
-		t_vec3 norm = normalize(subtraction3(inter, center));
-		float li = light(inter, lp, norm);
-		t_color color = (t_color){.red = 200 * li, .green = 100 * li, .blue = 50 * li};
-		putpixel(rt->sdl.screen, pixel.x, pixel.y, color8_to_32(color));
-	}
-}
-
-void		pixel_shader(t_rt *rt, t_point pixel, t_vec3 a)
+void		pixel_shader(t_rt *rt, t_point pixel, t_vec3 dir)
 {
 	float	point;
 	float	intensity;
 	t_vec3	intersect;
 	t_vec3	norm;
-
-	point = sphere_intersect(rt->sphere.rad, rt->sphere.center, rt->cam, a);
+	
+	point = sphere_intersect(rt->sphere.rad, rt->sphere.center, rt->cam, dir);
 	if (point >= 0)
 	{
-		intersect = addition3(rt->cam, cross_scalar(a, point));
+		intersect = addition3(rt->cam, cross_scalar(dir, point));
 		norm = normalize(subtraction3(intersect, rt->sphere.center));
 		intensity = light(intersect, rt->light, norm);
-		putpixel(rt->sdl.screen, pixel.x, pixel.y,
-			color8_to_32(mix_color(rt->sphere.color, intensity)));
+		rt->sphere.color = mix_color(rt->sphere.color, intensity);
+		putpixel(rt->sdl.screen, pixel.x, pixel.y, color8_to_32(rt->sphere.color));
 	}
 }

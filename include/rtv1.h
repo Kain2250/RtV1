@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 04:16:44 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/22 05:03:00 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdbool.h>
 # include <math.h>
 
-# define WIN_WIDTH 700
-# define WIN_HEIGHT 700
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 600
 # define NAME_WIN "RTV by Bdrinkin"
 # define SPHERE 0
 
@@ -120,8 +120,8 @@ t_vec3				cross(t_vec3 a, t_vec3 b);
 void				clear_surface(SDL_Surface *surface, Uint32 color);
 t_vec3				cross_scalar(t_vec3 vect, float scalar);
 
-
-void				pixel_shader(t_rt *rt, t_point pixel);
+void				coleidoscope(t_rt *rt, t_point pixel, t_vec3 a);
+void				pixel_shader(t_rt *rt, t_point pixel, t_vec3 dir);
 void				shading(t_rt *rt);
 
 #endif

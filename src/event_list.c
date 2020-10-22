@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 04:07:00 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/22 05:08:49 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ bool			event_exit(t_rt *rt)
 void		keyboard_events(t_rt *rt, SDL_Keycode sym, Uint32 type)
 {
 	if (sym == SDLK_w && type == SDL_KEYDOWN)
-		rt->sphere.rad += 10;
+		rt->ray.z += 10;
 	else if (sym == SDLK_s && type == SDL_KEYDOWN)
-		rt->sphere.rad -= 10;
+		rt->ray.z -= 10;
 	else if (sym == SDLK_d && type == SDL_KEYDOWN)
-		rt->x += 10;
+		rt->light.x += 10;
 	else if (sym == SDLK_a && type == SDL_KEYDOWN)
-		rt->x -= 10;
+		rt->light.x -= 10;
 }
 
 void		event_list(t_rt *rt)

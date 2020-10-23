@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 05:03:00 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/23 04:14:41 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,33 @@
 # define RTV1_H
 
 # include "libft.h"
-# include "SDL.h"
-# include "SDL_image.h"
-# include "SDL_ttf.h"
+# include "SDL2/SDL.h"
+# include "SDL2/SDL_image.h"
+# include "SDL2/SDL_ttf.h"
 # include "errorout.h"
 # include <stdbool.h>
 # include <math.h>
+// # include <CL/cl.h>
 
 # define WIN_WIDTH 800
-# define WIN_HEIGHT 600
+# define WIN_HEIGHT 800
 # define NAME_WIN "RTV by Bdrinkin"
 # define SPHERE 0
 
+typedef enum		s_e_light_type
+{
+	e_ambient,
+	e_point,
+	e_sun
+}					t_e_light_type;
+
+typedef enum		s_e_shape
+{
+	e_sphere,
+	e_conus,
+	e_cilindr,
+	e_plane
+}					t_e_shape;
 
 typedef struct		s_point
 {
@@ -73,35 +88,77 @@ typedef struct		s_color
 typedef struct		s_sdl
 {
 	SDL_Window		*window;
-	SDL_Surface		*screen;
+	SDL_Renderer	*screen;
+	SDL_GLContext	glcontext;
 	SDL_Event		event;
 }					t_sdl;;
 
-typedef struct		s_shape
+typedef struct		s_sphere
+{
+	uint8_t			type;
+	t_vec3			center;
+	uint8_t			specular;
+	float			rad;
+	t_color			color;
+}					t_sphere;
+
+typedef struct		s_disk
+{
+	float			t1;
+	float			t2;
+}					t_disk;
+
+typedef struct		s_conus
 {
 	t_color			color;
 	t_vec3			center;
 	u_char			type;
 	float			rad;
-}					t_shape;
+	float			height;
+	t_vec3			mount;
+}					t_conus;
+
+typedef struct		s_cam
+{
+	t_vec3			opoint;
+	t_vec3			ray;
+	t_vec3			dir;
+}					t_cam;
+
+// typedef struct		s_cl
+// {
+// 	cl_platform_id	platform_id;
+// 	cl_uint			num_platform;
+// 	cl_device_id 	devices_id;
+// 	cl_uint			num_devices;
+// 	cl_context		context;
+// 	cl_command_queue	command_queue;
+
+// }					t_cl;
+
+typedef struct		s_light
+{
+	t_vec3			dir;
+	float			intens;
+	uint8_t			type;
+	t_color			color;
+}					t_light;
 
 typedef struct		s_rt
 {
 	t_sdl			sdl;
-	t_shape			sphere;
+	t_sphere		*sphere;
 	t_mouse			mouse;
-	t_vec3			light;
-	t_vec3			cam;
-	t_vec3			ray;
+	t_light			*light;
+	t_cam			cam;
 	bool			quit;
-	float			z;
-	float			x;
 }					t_rt;
 
 int					main(void);
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
 int					which_button(bool *mouse);
+t_color				trace_ray(t_cam ray, t_point limit, t_sphere *sphere, t_light *in_light);
 
 
 int					put_error_sys(char *error);

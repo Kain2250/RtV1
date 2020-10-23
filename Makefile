@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+         #
+#    By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/21 19:14:26 by kain2250          #+#    #+#              #
-#    Updated: 2020/10/21 16:39:58 by bdrinkin         ###   ########.fr        #
+#    Updated: 2020/10/22 21:14:17 by kain2250         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,32 +16,39 @@ NAME = rtv1
 # Флаги компиляции:
 GCC = gcc
 CCFLAGS = -Wall -Wextra -Werror
-OTHERS_FLAGS = -lm
-
+OTHERS_FLAGS = -lm -lft -lSDL2 -lSDL2_image -lSDL2_ttf -lGL
 # Список фреймворков и их пути:
 FRAME_SDL2_DIR = Frameworks
 FRAME_SDL2 = $(FRAME_SDL2_DIR)/SDL2.framework
 FRAME_SDL2_IMAGE = $(FRAME_SDL2_DIR)/SDL2_image.framework
 FRAME_SDL2_TTF = $(FRAME_SDL2_DIR)/SDL2_ttf.framework
-FRAMEWORKS = -F Frameworks \
-	-framework SDL2 \
-	-framework SDL2_image \
-	-framework SDL2_ttf \
-	-rpath $(FRAME_SDL2_DIR)
+
+ifeq ($(shell uname), Linux)
+	FRAMEWORKS = -L /usr/bin/
+	INCLUDES_SDL2 = -I /usr/local/include/
+else
+	FRAMEWORKS = -F Frameworks \
+		-framework SDL2 \
+		-framework SDL2_image \
+		-framework SDL2_ttf \
+		-rpath $(FRAME_SDL2_DIR)
+
+	INCLUDES_SDL2 = -F $(FRAME_SDL2_DIR) \
+	-I $(FRAME_SDL2)/Headers \
+	-I $(FRAME_SDL2_IMAGE)/Headers \
+	-I $(FRAME_SDL2_TTF)/Headers
+endif
 
 # Список библиотек и их пути:
 LIBFT_DIRECTORY = libft
 
 # Флаги для сборки библиотек
-LIBRARIES_LIBFT = -L $(LIBFT_DIRECTORY) -lft
+LIBRARIES_LIBFT = -L $(LIBFT_DIRECTORY)
 
 # Заголовочные файлы и их пути:
 INCLUDES_DIRECTORY = include/
 INCLUDES_DIRECTORY_LIBFT = $(LIBFT_DIRECTORY)/includes
-INCLUDES_SDL2 = -F $(FRAME_SDL2_DIR) \
-	-I $(FRAME_SDL2)/Headers \
-	-I $(FRAME_SDL2_IMAGE)/Headers \
-	-I $(FRAME_SDL2_TTF)/Headers \
+
 
 INCLUDES = -I$(INCLUDES_DIRECTORY) \
 	-I$(INCLUDES_DIRECTORY_LIBFT) \
@@ -72,7 +79,7 @@ all: $(NAME)
 $(NAME): $(LIBFT_DIRECTORY) $(SRC) $(HEADERS)
 	@$(MAKE) -C $(LIBFT_DIRECTORY)
 	@echo "wolf3d: $(GREEN)Компиляция исполняемого файла$(RESET)\n"
-	@$(GCC) $(CCFLAGS) $(INCLUDES) $(LIBRARIES_LIBFT) $(FRAMEWORKS) $(OTHERS_FLAGS) $(SRC) -o $(NAME)
+	@$(GCC) $(CCFLAGS) $(SRC) $(INCLUDES) $(LIBRARIES_LIBFT) $(FRAMEWORKS) $(OTHERS_FLAGS) -o $(NAME)
 	@echo "wolf3d: $(GREEN)Компиляция завершена$(RESET)\n"
 
 $(LIBFT_DIRECTORY):
@@ -81,7 +88,7 @@ $(LIBFT_DIRECTORY):
 debug: $(LIBFT_DIRECTORY) $(SRC) $(HEADERS)
 	@$(MAKE) -C $(LIBFT_DIRECTORY)
 	@echo "wolf3d: $(GREEN)Компиляция исполняемого файла$(RESET)\n"
-	@$(GCC) -g $(CCFLAGS) $(INCLUDES) $(LIBRARIES_LIBFT) $(FRAMEWORKS) $(OTHERS_FLAGS) $(SRC) -o $(NAME)
+	@$(GCC) -g $(CCFLAGS) $(SRC) $(INCLUDES) $(LIBRARIES_LIBFT) $(FRAMEWORKS) $(OTHERS_FLAGS) -o $(NAME)
 	@echo "wolf3d: $(GREEN)Компиляция завершена$(RESET)\n"
 
 clean:

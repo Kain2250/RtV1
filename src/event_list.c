@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 05:08:49 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/22 23:35:05 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,25 @@ bool			event_exit(t_rt *rt)
 void		keyboard_events(t_rt *rt, SDL_Keycode sym, Uint32 type)
 {
 	if (sym == SDLK_w && type == SDL_KEYDOWN)
-		rt->ray.z += 10;
+		rt->cam.opoint.y -= 0.2;
 	else if (sym == SDLK_s && type == SDL_KEYDOWN)
-		rt->ray.z -= 10;
+		rt->cam.opoint.y += 0.2;
 	else if (sym == SDLK_d && type == SDL_KEYDOWN)
-		rt->light.x += 10;
+		rt->cam.opoint.x -= 0.2;
 	else if (sym == SDLK_a && type == SDL_KEYDOWN)
-		rt->light.x -= 10;
+		rt->cam.opoint.x += 0.2;
 }
 
 void		event_list(t_rt *rt)
 {
-	SDL_WaitEvent(&rt->sdl.event);
-	if (event_exit(rt) == true)
-		rt->quit = true;
-	else
+	while (SDL_PollEvent(&rt->sdl.event) != 0)
 	{
-		keyboard_events(rt, rt->sdl.event.key.keysym.sym, rt->sdl.event.type);
-		// mouse_events(rt);
+		if (event_exit(rt) == true)
+			rt->quit = true;
+		else
+		{
+			keyboard_events(rt, rt->sdl.event.key.keysym.sym, rt->sdl.event.type);
+			mouse_events(rt);
+		}
 	}
-
 }

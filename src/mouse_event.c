@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_event.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:14:39 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 02:16:01 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/23 02:41:03 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,15 @@ static void	button_rigth_event(t_rt *rt)
 static void	button_left_event(t_rt *rt)
 {
 	(void)rt;
+	if (rt->sdl.event.motion.xrel < 0 && rt->mouse.is_presed)
+		rt->light[0].dir.x += atan(rt->sdl.event.motion.xrel);
+	else if (rt->sdl.event.motion.xrel > 0 && rt->mouse.is_presed)
+		rt->light[0].dir.x += atan(rt->sdl.event.motion.xrel);
+	else if (rt->sdl.event.motion.yrel < 0 && rt->mouse.is_presed)
+		rt->light[0].dir.y -= atan(rt->sdl.event.motion.yrel);
+	else if (rt->sdl.event.motion.yrel > 0 && rt->mouse.is_presed)
+		rt->light[0].dir.y -= atan(rt->sdl.event.motion.yrel);
+
 }
 
 static void	button_midle_event(t_rt *rt)
@@ -47,4 +56,8 @@ void		mouse_events(t_rt *rt)
 		button_left_event(rt);
 	else if (SDL_BUTTON_MIDDLE == button)
 		button_midle_event(rt);
+	if (rt->sdl.event.wheel.type == SDL_MOUSEWHEEL && rt->sdl.event.wheel.y > 0)
+		rt->cam.opoint.x += 0.1;
+	if (rt->sdl.event.wheel.type == SDL_MOUSEWHEEL && rt->sdl.event.wheel.y < 0)
+		rt->cam.opoint.x -= 0.1;
 }

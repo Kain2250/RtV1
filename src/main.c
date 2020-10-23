@@ -6,7 +6,7 @@
 /*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 04:17:47 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 04:26:46 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ void	rt_free(t_rt *rt)
 
 void	init_cam(t_rt *rt)
 {
-	rt->sphere = ft_memalloc(sizeof(t_sphere) * 2);
-	rt->sphere[0].center = (t_vec3){.x = -1., .y = 0., .z = 4.};
-	rt->sphere[0].color = (t_color){.red = 100, .green = 55, .blue = 100};
-	rt->sphere[0].rad = 1.f;
-	rt->sphere[0].type = e_sphere;
+	rt->shapes = ft_memalloc(sizeof(t_shape) * 2);
+	rt->shapes[0].center = (t_vec3){.x = -1., .y = 0., .z = 4.};
+	rt->shapes[0].color = (t_color){.red = 100, .green = 55, .blue = 100};
+	rt->shapes[0].rad = 1.f;
+	rt->shapes[0].type = e_sphere;
 
-	rt->sphere[1].center = (t_vec3){.x = 1., .y = 0., .z = 4.};
-	rt->sphere[1].color = (t_color){.red = 100, .green = 200, .blue = 50};
-	rt->sphere[1].rad = 1.f;
-	rt->sphere[1].type = e_sphere;
+	rt->shapes[1].center = (t_vec3){.x = 1., .y = 0., .z = 4.};
+	rt->shapes[1].color = (t_color){.red = 100, .green = 200, .blue = 50};
+	rt->shapes[1].rad = 1.f;
+	rt->shapes[1].type = e_sphere;
 
 
 	rt->light = ft_memalloc(sizeof(t_light) * 2);

@@ -6,7 +6,7 @@
 /*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:02:27 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 02:41:56 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 04:28:32 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		shading(t_rt *rt)
 		{
 			rt->cam.ray.x = pixel.x - (WIN_WIDTH * 0.5);
 			rt->cam.dir = normalize(subtraction3(rt->cam.ray, rt->cam.opoint));
-			color = trace_ray(rt->cam, (t_point){.x = 0, .y = 1000}, rt->sphere, rt->light);
+			color = trace_ray(rt->cam, (t_point){.x = 0, .y = 1000}, rt->shapes, rt->light);
 			SDL_SetRenderDrawColor(rt->sdl.screen, color.red, color.green, color.blue, 0);
 			SDL_RenderDrawPoint(rt->sdl.screen, pixel.x, pixel.y);
 			// coleidoscope(rt, pixel, dir);

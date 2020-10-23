@@ -6,7 +6,7 @@
 /*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 04:14:41 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 04:30:59 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 800
 # define NAME_WIN "RTV by Bdrinkin"
-# define SPHERE 0
 
 typedef enum		s_e_light_type
 {
@@ -89,18 +88,17 @@ typedef struct		s_sdl
 {
 	SDL_Window		*window;
 	SDL_Renderer	*screen;
-	SDL_GLContext	glcontext;
 	SDL_Event		event;
 }					t_sdl;;
 
-typedef struct		s_sphere
+typedef struct		s_shape
 {
 	uint8_t			type;
 	t_vec3			center;
 	uint8_t			specular;
 	float			rad;
 	t_color			color;
-}					t_sphere;
+}					t_shape;
 
 typedef struct		s_disk
 {
@@ -108,15 +106,6 @@ typedef struct		s_disk
 	float			t2;
 }					t_disk;
 
-typedef struct		s_conus
-{
-	t_color			color;
-	t_vec3			center;
-	u_char			type;
-	float			rad;
-	float			height;
-	t_vec3			mount;
-}					t_conus;
 
 typedef struct		s_cam
 {
@@ -147,7 +136,7 @@ typedef struct		s_light
 typedef struct		s_rt
 {
 	t_sdl			sdl;
-	t_sphere		*sphere;
+	t_shape			*shapes;
 	t_mouse			mouse;
 	t_light			*light;
 	t_cam			cam;
@@ -158,7 +147,7 @@ int					main(void);
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
 int					which_button(bool *mouse);
-t_color				trace_ray(t_cam ray, t_point limit, t_sphere *sphere, t_light *in_light);
+t_color				trace_ray(t_cam ray, t_point limit, t_shape *shape, t_light *in_light);
 
 
 int					put_error_sys(char *error);

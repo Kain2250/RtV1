@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 23:35:05 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 18:41:05 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ bool			event_exit(t_rt *rt)
 		return (false);
 }
 
-void		keyboard_events(t_rt *rt, SDL_Keycode sym, Uint32 type)
+void		keyboard_events(t_rt *rt, SDL_Keycode sym)
 {
-	if (sym == SDLK_w && type == SDL_KEYDOWN)
-		rt->cam.opoint.y -= 0.2;
-	else if (sym == SDLK_s && type == SDL_KEYDOWN)
-		rt->cam.opoint.y += 0.2;
-	else if (sym == SDLK_d && type == SDL_KEYDOWN)
-		rt->cam.opoint.x -= 0.2;
-	else if (sym == SDLK_a && type == SDL_KEYDOWN)
-		rt->cam.opoint.x += 0.2;
+	if (sym == SDLK_w)
+		rt->cam.opoint.y -= 1 * 0.1;
+	else if (sym == SDLK_s)
+		rt->cam.opoint.y += 1 * 0.1;
+	else if (sym == SDLK_d)
+		rt->cam.opoint.x -= 1 * 0.1;
+	else if (sym == SDLK_a)
+		rt->cam.opoint.x += 1 * 0.1;
 }
 
 void		event_list(t_rt *rt)
@@ -57,10 +57,9 @@ void		event_list(t_rt *rt)
 	{
 		if (event_exit(rt) == true)
 			rt->quit = true;
-		else
-		{
-			keyboard_events(rt, rt->sdl.event.key.keysym.sym, rt->sdl.event.type);
+		else if (rt->sdl.event.type == SDL_MOUSEBUTTONDOWN || rt->sdl.event.type == SDL_MOUSEMOTION || rt->sdl.event.wheel.type == SDL_MOUSEWHEEL)
 			mouse_events(rt);
-		}
+		else if (rt->sdl.event.type == SDL_KEYDOWN)
+			keyboard_events(rt, rt->sdl.event.key.keysym.sym);
 	}
 }

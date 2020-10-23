@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 04:30:59 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 22:29:50 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define RTV1_H
 
 # include "libft.h"
-# include "SDL2/SDL.h"
-# include "SDL2/SDL_image.h"
-# include "SDL2/SDL_ttf.h"
+# include "SDL.h"
+# include "SDL_image.h"
+# include "SDL_ttf.h"
 # include "errorout.h"
 # include <stdbool.h>
 # include <math.h>
@@ -49,23 +49,23 @@ typedef struct		s_point
 
 typedef struct		s_vec2
 {
-	float			x;
-	float			y;
+	double			x;
+	double			y;
 }					t_vec2;
 
 typedef struct		s_vec3
 {
-	float			x;
-	float			y;
-	float			z;
+	double			x;
+	double			y;
+	double			z;
 }					t_vec3;
 
 typedef struct		s_vec4
 {
-	float			r;
-	float			g;
-	float			b;
-	float			a;
+	double			r;
+	double			g;
+	double			b;
+	double			a;
 }					t_vec4;
 
 typedef struct		s_mouse
@@ -96,14 +96,15 @@ typedef struct		s_shape
 	uint8_t			type;
 	t_vec3			center;
 	uint8_t			specular;
-	float			rad;
+	t_vec3			norm;
+	double			rad;
 	t_color			color;
 }					t_shape;
 
 typedef struct		s_disk
 {
-	float			t1;
-	float			t2;
+	double			t1;
+	double			t2;
 }					t_disk;
 
 
@@ -112,6 +113,7 @@ typedef struct		s_cam
 	t_vec3			opoint;
 	t_vec3			ray;
 	t_vec3			dir;
+	double			dot_dir;
 }					t_cam;
 
 // typedef struct		s_cl
@@ -128,7 +130,7 @@ typedef struct		s_cam
 typedef struct		s_light
 {
 	t_vec3			dir;
-	float			intens;
+	double			intens;
 	uint8_t			type;
 	t_color			color;
 }					t_light;
@@ -140,6 +142,9 @@ typedef struct		s_rt
 	t_mouse			mouse;
 	t_light			*light;
 	t_cam			cam;
+	int				max_shape;
+	int				max_light;
+	t_point			limit;
 	bool			quit;
 }					t_rt;
 
@@ -147,24 +152,33 @@ int					main(void);
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
 int					which_button(bool *mouse);
-t_color				trace_ray(t_cam ray, t_point limit, t_shape *shape, t_light *in_light);
+t_color				trace_ray(t_cam ray, t_rt *rt, t_shape *shape, t_light *in_light);
 
 
 int					put_error_sys(char *error);
 bool				put_error_sdl(char *error, const char *error_sdl);
 bool				init_lib_sdl(t_rt *rt);
 
-float				mod3(t_vec3 vec);
-float				multiplication(t_vec3 v1, t_vec3 v2);
-float				acos_vec3(t_vec3 v1, t_vec3 v2);
-float				dot3(t_vec3 v1, t_vec3 v2);
+double				mod3(t_vec3 vec);
+double				multiplication(t_vec3 v1, t_vec3 v2);
+double				acos_vec3(t_vec3 v1, t_vec3 v2);
+double				dot3(t_vec3 v1, t_vec3 v2);
 t_vec3				subtraction3(t_vec3 v1, t_vec3 v2);
 t_vec3				addition3(t_vec3 v1, t_vec3 v2);
 t_vec3				normalize(t_vec3 vector);
-float				clamp(float x, float min, float max);
+double				clamp(double x, double min, double max);
 t_vec3				cross(t_vec3 a, t_vec3 b);
 void				clear_surface(SDL_Surface *surface, Uint32 color);
-t_vec3				cross_scalar(t_vec3 vect, float scalar);
+t_vec3				cross_scalar(t_vec3 vect, double scalar);
+
+t_disk				sphere_intersect(double rad, t_vec3 center,
+						t_vec3 cam, t_vec3 direction);
+t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
+double				find_intensity(t_vec3 intersect, t_light *is_light,
+							t_vec3 norm, int max_light);
+double				light(t_vec3 intersect, t_vec3 l_point,
+						t_vec3 norm, double intensity);
+
 
 void				coleidoscope(t_rt *rt, t_point pixel, t_vec3 a);
 void				pixel_shader(t_rt *rt, t_point pixel, t_vec3 dir);

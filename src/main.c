@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 04:26:46 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 22:38:08 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-#include <GL/gl.h>
 
 void	rt_free(t_rt *rt)
 {
@@ -22,28 +21,40 @@ void	rt_free(t_rt *rt)
 
 void	init_cam(t_rt *rt)
 {
-	rt->shapes = ft_memalloc(sizeof(t_shape) * 2);
-	rt->shapes[0].center = (t_vec3){.x = -1., .y = 0., .z = 4.};
-	rt->shapes[0].color = (t_color){.red = 100, .green = 55, .blue = 100};
+	rt->limit = (t_point){0, 1000};
+
+	rt->max_shape = 2;
+	//Сфера
+	rt->shapes = ft_memalloc(sizeof(t_shape) * rt->max_shape);
+	rt->shapes[0].center = (t_vec3){0., 0., 6.};
+	rt->shapes[0].color = (t_color){255, 55, 100};
 	rt->shapes[0].rad = 1.f;
 	rt->shapes[0].type = e_sphere;
 
-	rt->shapes[1].center = (t_vec3){.x = 1., .y = 0., .z = 4.};
-	rt->shapes[1].color = (t_color){.red = 100, .green = 200, .blue = 50};
-	rt->shapes[1].rad = 1.f;
-	rt->shapes[1].type = e_sphere;
-
-
-	rt->light = ft_memalloc(sizeof(t_light) * 2);
-	rt->light[0].dir = (t_vec3){.x = 0., .y = 0., .z = 0.};
-	rt->light[0].intens = 0.08;
-	rt->light[0].type = e_point;
-
-	rt->light[1].type = e_ambient;
-	rt->light[1].intens = 0.2;
+	//Плоскость
+	rt->shapes[1].center = (t_vec3){0, -7, 0};
+	rt->shapes[1].color = (t_color){255, 255, 255};
+	rt->shapes[1].rad = INFINITY;
+	rt->shapes[1].norm = (t_vec3){0, 1, -0.9};
+	rt->shapes[1].type = e_plane;
+	//Цилиндр
+	// rt->shapes[2].center = (t_vec3){2., 0., 6.};
+	// rt->shapes[2].color = (t_color){25, 100, 5};
+	// rt->shapes[2].rad = 2.f;
+	// rt->shapes[2].type = e_cilindr;
 	
-	rt->cam.opoint = (t_vec3){.x = 0., .y = 0., .z = 1.};
-	rt->cam.ray.z = 400;
+	rt->max_light = 2;
+	rt->light = ft_memalloc(sizeof(t_light) * rt->max_light);
+	//Направтеный свет
+	rt->light[0].dir = (t_vec3){-0.5, -0.5, 0.5};
+	rt->light[0].intens = 0.5;
+	rt->light[0].type = e_point;
+	//Эмбиент
+	rt->light[1].type = e_ambient;
+	rt->light[1].intens = 0.08;
+	
+	rt->cam.opoint = (t_vec3){0., 0., -2.};
+	rt->cam.ray.z = rt->cam.opoint.z + 1;
 	rt->cam.ray.x = 0;
 	rt->cam.ray.y = 0;
 

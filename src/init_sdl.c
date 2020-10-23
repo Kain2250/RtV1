@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_sdl.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 08:30:01 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/22 22:22:10 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/23 18:32:24 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool			init_sdl(t_rt *rt)
 	if ((rt->sdl.screen = SDL_CreateRenderer(rt->sdl.window, 0,
 			SDL_RENDERER_ACCELERATED)) == NULL)
 		return (false);
-	SDL_SetRelativeMouseMode(true);
+	// SDL_SetRelativeMouseMode(true);
 	return (true);
 }
 

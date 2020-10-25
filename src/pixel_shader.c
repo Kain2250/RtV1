@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 22:31:35 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/25 19:18:26 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,25 +68,33 @@ t_disk		conus_intersect(double rad, t_vec3 center,
 	return (point);
 }
 
-t_disk		cylinder_intersect(double rad, t_vec3 center,
+
+t_disk		cylinder_intersect(t_shape shape,
 				t_vec3 cam, t_vec3 direction)
 {
-	t_vec3	sphere;
+	t_vec3	cyl;
 	t_disk	point;
 	double	diskr;
 	t_vec3	cam_center;
 	double	disqrt;
+	double	a_a;
+	double	d_v;
+	double	x_v;
 
-	cam_center = subtraction3(cam, center);
-	sphere.x = dot3(direction, direction) - dot3(direction, (t_vec3){0, 1, 0}) * dot3(direction, (t_vec3){0, 1, 0});
-	sphere.y = 2.f * dot3(cam_center, direction) - dot3(direction, (t_vec3){0, 1, 0}) * dot3(cam_center, (t_vec3){0, 1, 0});
-	sphere.z = dot3(cam_center, (t_vec3){0, 1, 0}) * dot3(cam_center, (t_vec3){0, 1, 0}) - rad * rad;
-	diskr = sphere.y * sphere.y - 4.f * sphere.x * sphere.z;
+	cam_center = subtraction3(cam, shape.center);
+	cyl = equation_variable(direction, cam_center);
+	d_v = dot3(direction, shape.axis);
+	x_v = dot3(cam_center, shape.axis);
+	cyl.x -= d_v * d_v;
+	cyl.y -= d_v * x_v;
+	cyl.z -= x_v * x_v - shape.rad * shape.rad;
+	diskr = cyl.y * cyl.y - 4.f * cyl.x * cyl.z;
 	if (diskr < 0)
 		return (point = (t_disk){INFINITY, INFINITY});
 	disqrt = sqrt(diskr);
-	point.t1 = (-sphere.y + disqrt) / (2.f * sphere.x);
-	point.t2 = (-sphere.y - disqrt) / (2.f * sphere.x);
+	a_a = 2.f * cyl.x;
+	point.t1 = (-cyl.y + disqrt) / a_a;
+	point.t2 = (-cyl.y - disqrt) / a_a;
 	return (point);
 }
 
@@ -102,14 +110,14 @@ t_color		trace_ray(t_cam ray, t_rt *rt, t_shape *shape, t_light *is_light)
 	while (i < rt->max_shape)
 	{
 		if (shape[i].type == e_sphere)
-			point = sphere_intersect(shape[i].rad, shape[i].center, ray.opoint, ray.dir);
-		// else if (shape[i].type == e_conus)
-		// 	point = conus_intersect(shape[i].rad, shape[i].center, ray.opoint, ray.dir);
-		// else if (shape[i].type == e_cilindr)
-		// 	point = cylinder_intersect(shape[i].rad, shape[i].center, ray.opoint, ray.dir);
+			point = sphere_intersect(shape[i], ray.opoint, ray.dir);
+		else if (shape[i].type == e_conus)
+			point = conus_intersect(shape[i].rad, shape[i].center, ray.opoint, ray.dir);
+		else if (shape[i].type == e_cilindr)
+			point = cylinder_intersect(shape[i], ray.opoint, ray.dir);
 		else
 			point = plane_intersect(ray, shape[i].center, shape[i].norm);
-		if (point.t1 < result && (point.t1 >= rt->limit.x || point.t1 < rt->limit.y))
+		if (point.t1 < result && (point.t1 > rt->limit.x || point.t1 < rt->limit.y))
 		{
 			result = point.t1;
 			color_fill(&color, shape[i].color);
@@ -119,20 +127,26 @@ t_color		trace_ray(t_cam ray, t_rt *rt, t_shape *shape, t_light *is_light)
 					intersect = (t_vec3){INFINITY, INFINITY, INFINITY};
 			if (shape[i].type == e_sphere)
 				norm = normalize(subtraction3(intersect, shape[i].center));
-			// else if (shape[i].type == e_cilindr)
-			// 	norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar((t_vec3){0, 1, 0}, result)));
+			else if (shape[i].type == e_cilindr)
+			{
+				double m = dot3(ray.dir, cross_scalar(shape[i].axis, result)) + dot3(subtraction3(shape[i].center, ray.opoint), shape[i].axis);
+				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m)));
+			}
 			else if (shape[i].type == e_plane)
 				norm = shape[i].norm;
 		}
-		if (point.t2 < result && (point.t2 >= rt->limit.x || point.t2 < rt->limit.y))
+		if (point.t2 < result && (point.t2 > rt->limit.x || point.t2 < rt->limit.y))
 		{
 			result = point.t2;
 			color_fill(&color, shape[i].color);
 			intersect = addition3(ray.opoint, cross_scalar(ray.dir, result));
 			if (shape[i].type == e_sphere)
 				norm = normalize(subtraction3(intersect, shape[i].center));
-			// else if (shape[i].type == e_cilindr)
-			// 	norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar((t_vec3){0, 1, 0}, result)));
+			else if (shape[i].type == e_cilindr)
+			{
+				double m = dot3(ray.dir, cross_scalar(shape[i].axis, result)) + dot3(subtraction3(shape[i].center, ray.opoint), shape[i].axis);
+				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m)));
+			}
 		}
 		i++;
 	}

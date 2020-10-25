@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 22:29:50 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/25 20:51:23 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <math.h>
 // # include <CL/cl.h>
 
-# define WIN_WIDTH 800
-# define WIN_HEIGHT 800
+# define WIN_WIDTH 300
+# define WIN_HEIGHT 300
 # define NAME_WIN "RTV by Bdrinkin"
 
 typedef enum		s_e_light_type
@@ -89,14 +89,17 @@ typedef struct		s_sdl
 	SDL_Window		*window;
 	SDL_Renderer	*screen;
 	SDL_Event		event;
+	int				win_hight;
+	int				win_width;
 }					t_sdl;;
 
 typedef struct		s_shape
 {
 	uint8_t			type;
 	t_vec3			center;
-	uint8_t			specular;
+	double			specular;
 	t_vec3			norm;
+	t_vec3			axis;
 	double			rad;
 	t_color			color;
 }					t_shape;
@@ -124,7 +127,6 @@ typedef struct		s_cam
 // 	cl_uint			num_devices;
 // 	cl_context		context;
 // 	cl_command_queue	command_queue;
-
 // }					t_cl;
 
 typedef struct		s_light
@@ -133,6 +135,7 @@ typedef struct		s_light
 	double			intens;
 	uint8_t			type;
 	t_color			color;
+	bool			on;
 }					t_light;
 
 typedef struct		s_rt
@@ -146,6 +149,8 @@ typedef struct		s_rt
 	int				max_light;
 	t_point			limit;
 	bool			quit;
+	int				x;
+	int				y;
 }					t_rt;
 
 int					main(void);
@@ -171,13 +176,14 @@ t_vec3				cross(t_vec3 a, t_vec3 b);
 void				clear_surface(SDL_Surface *surface, Uint32 color);
 t_vec3				cross_scalar(t_vec3 vect, double scalar);
 
-t_disk				sphere_intersect(double rad, t_vec3 center,
-						t_vec3 cam, t_vec3 direction);
+t_disk				sphere_intersect(t_shape shape, t_vec3 cam,
+						t_vec3 direction);
 t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
 double				find_intensity(t_vec3 intersect, t_light *is_light,
-							t_vec3 norm, int max_light);
+						t_vec3 norm, int max_light);
 double				light(t_vec3 intersect, t_vec3 l_point,
 						t_vec3 norm, double intensity);
+t_vec3				equation_variable(t_vec3 direction, t_vec3 cam_center);
 
 
 void				coleidoscope(t_rt *rt, t_point pixel, t_vec3 a);

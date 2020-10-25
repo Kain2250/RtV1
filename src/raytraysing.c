@@ -6,58 +6,29 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:02:27 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 22:08:54 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/25 20:43:51 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-/* void		shading(t_rt *rt)
-{
-	t_point	pixel;
-	// t_vec3	dir;
-	t_color	color;
-
-	pixel.y = 0;
-	while (pixel.y < WIN_HEIGHT)
-	{
-		rt->cam.ray.y = (WIN_HEIGHT * 0.5) - pixel.y;
-		pixel.x = 0;
-		while (pixel.x < WIN_WIDTH)
-		{
-			rt->cam.ray.x = pixel.x - (WIN_WIDTH * 0.5);
-			rt->cam.dir = normalize(subtraction3(rt->cam.ray, rt->cam.opoint));
-			color = trace_ray(rt->cam, (t_point){.x = 0, .y = 1000}, rt->shapes, rt->light);
-			SDL_SetRenderDrawColor(rt->sdl.screen, color.red, color.green, color.blue, 0);
-			SDL_RenderDrawPoint(rt->sdl.screen, pixel.x, pixel.y);
-			// coleidoscope(rt, pixel, dir);
-			// pixel_shader(rt, pixel, dir);
-			pixel.x++;
-		}
-		pixel.y++;
-	}
-} */
-
 void		shading(t_rt *rt)
 {
 	t_point	pixel;
-	// t_vec3	dir;
 	t_color	color;
 
 	pixel.y = 0;
-	while (pixel.y < WIN_HEIGHT)
+	while (pixel.y < rt->sdl.win_hight)
 	{
-		rt->cam.ray.y = (WIN_HEIGHT * 0.5 - pixel.y) / WIN_HEIGHT;
+		rt->cam.ray.y = (rt->sdl.win_hight * 0.5 - pixel.y) / rt->sdl.win_hight + rt->y;
 		pixel.x = 0;
-		while (pixel.x < WIN_WIDTH)
+		while (pixel.x < rt->sdl.win_width)
 		{
-			rt->cam.ray.x = (pixel.x - (WIN_WIDTH * 0.5)) / WIN_HEIGHT;
+			rt->cam.ray.x = (pixel.x - (rt->sdl.win_width * 0.5)) / rt->sdl.win_hight + rt->x;
 			rt->cam.dir = normalize(subtraction3(rt->cam.ray, rt->cam.opoint));
 			color = trace_ray(rt->cam, rt, rt->shapes, rt->light);
 			SDL_SetRenderDrawColor(rt->sdl.screen, color.red, color.green, color.blue, 1);
 			SDL_RenderDrawPoint(rt->sdl.screen, pixel.x, pixel.y);
-			// coleidoscope(rt, pixel, dir);
-			// pixel_shader(rt, pixel, dir);
 			pixel.x++;
 		}
 		pixel.y++;

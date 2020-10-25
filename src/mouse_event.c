@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:14:39 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 21:28:12 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/25 19:02:15 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void		is_mouse_presed(t_mouse *mouse)
 static void	button_rigth_event(t_rt *rt)
 {
 	(void)rt;
-	if (rt->sdl.event.type == SDL_MOUSEMOTION)
-	{
-		rt->shapes[0].center.x += atan(rt->sdl.event.motion.xrel);
-		rt->shapes[0].center.y -= atan(rt->sdl.event.motion.yrel);
-		// rt->shapes[0].center.z += atan(rt->sdl.event.motion.yrel);
-		// rt->shapes[0].center.y++;
-	}
+	// if (rt->sdl.event.type == SDL_MOUSEMOTION)
+	// {
+	// 	rt->shapes[0].center.x += atan(rt->sdl.event.motion.xrel);
+	// 	rt->shapes[0].center.y -= atan(rt->sdl.event.motion.yrel);
+	// 	// rt->shapes[0].center.z += atan(rt->sdl.event.motion.yrel);
+	// 	// rt->shapes[0].center.y++;
+	// }
 
 }
 
@@ -38,9 +38,7 @@ static void	button_left_event(t_rt *rt)
 	(void)rt;
 	if (rt->sdl.event.type == SDL_MOUSEMOTION)
 	{
-		rt->light[0].dir.x += atan(rt->sdl.event.motion.xrel);
-		rt->light[0].dir.y -= atan(rt->sdl.event.motion.yrel);
-		rt->light[0].dir.z += atan(rt->sdl.event.motion.yrel);
+		rt->cam.opoint.x += atan(rt->sdl.event.motion.xrel);
 	}
 }
 

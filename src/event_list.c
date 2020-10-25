@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/23 18:41:05 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/25 19:24:32 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,61 @@ bool			event_exit(t_rt *rt)
 void		keyboard_events(t_rt *rt, SDL_Keycode sym)
 {
 	if (sym == SDLK_w)
-		rt->cam.opoint.y -= 1 * 0.1;
+		rt->shapes[0].center.y += 1 * 0.1;
 	else if (sym == SDLK_s)
-		rt->cam.opoint.y += 1 * 0.1;
+		rt->shapes[0].center.y -= 1 * 0.1;
 	else if (sym == SDLK_d)
-		rt->cam.opoint.x -= 1 * 0.1;
+		rt->shapes[0].center.x += 1 * 0.1;
 	else if (sym == SDLK_a)
+		rt->shapes[0].center.x -= 1 * 0.1;
+	else if (sym == SDLK_e)
+		rt->shapes[0].center.z += 1 * 0.1;
+	else if (sym == SDLK_q)
+		rt->shapes[0].center.z -= 1 * 0.1;
+
+	else if (sym == SDLK_i)
+		rt->light[1].dir.y += 1 * 0.1;
+	else if (sym == SDLK_k)
+		rt->light[1].dir.y -= 1 * 0.1;
+	else if (sym == SDLK_j)
+		rt->light[1].dir.x += 1 * 0.1;
+	else if (sym == SDLK_l)
+		rt->light[1].dir.x -= 1 * 0.1;
+	else if (sym == SDLK_u)
+		rt->light[1].dir.z += 1 * 0.1;
+	else if (sym == SDLK_o)
+		rt->light[1].dir.z -= 1 * 0.1;
+	
+	else if (sym == SDLK_8)
+		rt->light[0].on = !rt->light[0].on;
+	else if (sym == SDLK_9)
+		rt->light[1].on = !rt->light[1].on;
+	else if (sym == SDLK_0)
+		rt->light[2].on = !rt->light[2].on;
+
+	else if (sym == SDLK_t)
+		rt->cam.opoint.y += 1 * 0.1;
+	else if (sym == SDLK_g)
+		rt->cam.opoint.y -= 1 * 0.1;
+	else if (sym == SDLK_f)
 		rt->cam.opoint.x += 1 * 0.1;
+	else if (sym == SDLK_h)
+		rt->cam.opoint.x -= 1 * 0.1;
+	else if (sym == SDLK_r)
+		rt->cam.opoint.z += 1 * 0.1;
+	else if (sym == SDLK_y)
+		rt->cam.opoint.z -= 1 * 0.1;
+
+	else if (sym == SDLK_UP)
+		rt->y++;
+	else if (sym == SDLK_DOWN)
+		rt->y--;
+	else if (sym == SDLK_LEFT)
+		rt->x--;
+	else if (sym == SDLK_RIGHT)
+		rt->x++;
+
+
 }
 
 void		event_list(t_rt *rt)

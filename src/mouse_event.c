@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:14:39 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/25 19:02:15 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/26 16:09:07 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		mouse_events(t_rt *rt)
 	else if (SDL_BUTTON_MIDDLE == rt->sdl.event.button.button)
 		button_midle_event(rt);
 	else if (rt->sdl.event.wheel.type == SDL_MOUSEWHEEL && rt->sdl.event.wheel.y > 0)
-		rt->cam.opoint.z += rt->sdl.event.wheel.y * 0.01;
+		rt->cam.opoint.z += rt->sdl.event.wheel.y * 0.1;
 	else if (rt->sdl.event.wheel.type == SDL_MOUSEWHEEL && rt->sdl.event.wheel.y < 0)
-		rt->cam.opoint.z += rt->sdl.event.wheel.y * 0.01;
+		rt->cam.opoint.z += rt->sdl.event.wheel.y * 0.1;
 }

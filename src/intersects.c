@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 22:23:21 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/25 20:27:37 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/26 20:58:21 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,32 @@ t_vec3		equation_variable(t_vec3 direction, t_vec3 cam_center)
 	return (equation);
 }
 
+t_disk		cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction)
+{
+	t_vec3	x;
+	t_vec4	var;
+	double	d_v;
+	double	d_x;
+	double	sq;
+
+	x = subtraction3(cam, shape.center);
+	d_v = dot3(direction, shape.axis);
+	d_x = dot3(x, shape.axis);
+	var.a = dot3(direction, direction) - pow(d_v, 2.);
+	var.b = 2 * (dot3(direction, x) - d_v * d_x);
+	var.c = dot3(x, x) - pow(d_x, 2.) - shape.rad * shape.rad;
+	var.d = var.b * var.b - 4 * var.a * var.c;
+	if (var.d < 0)
+		return ((t_disk){INFINITY, INFINITY});
+	else
+	{
+		sq = sqrt(var.d);
+		return ((t_disk){
+		(-var.b + sq) / (2 * var.a),
+		(-var.b - sq) / (2 * var.a)});
+	}
+}
+
 t_disk		sphere_intersect(t_shape shape,
 				t_vec3 opoint, t_vec3 direction)
 {
@@ -66,14 +92,14 @@ t_disk		sphere_intersect(t_shape shape,
 	return (point);
 }
 
-t_disk		plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm)
+t_disk		plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm)
 {
 	t_disk	point;
 	double	a;
 	double	b;
 
-	a = dot3(subtraction3(ray.opoint, center), norm);
-	b = dot3(ray.dir, norm);
+	a = dot3(subtraction3(opoint, center), norm);
+	b = dot3(dir, norm);
 	point.t1 = -(a / b);
 	if (point.t1 < 0.)
 		point.t1 = INFINITY;

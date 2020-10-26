@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/25 20:51:23 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/26 20:28:41 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <math.h>
 // # include <CL/cl.h>
 
-# define WIN_WIDTH 300
-# define WIN_HEIGHT 300
+# define WIN_WIDTH 600
+# define WIN_HEIGHT 600
 # define NAME_WIN "RTV by Bdrinkin"
 
 typedef enum		s_e_light_type
@@ -62,10 +62,10 @@ typedef struct		s_vec3
 
 typedef struct		s_vec4
 {
-	double			r;
-	double			g;
-	double			b;
 	double			a;
+	double			b;
+	double			c;
+	double			d;
 }					t_vec4;
 
 typedef struct		s_mouse
@@ -102,6 +102,8 @@ typedef struct		s_shape
 	t_vec3			axis;
 	double			rad;
 	t_color			color;
+	double			k;
+	double			pow_k;
 }					t_shape;
 
 typedef struct		s_disk
@@ -114,9 +116,7 @@ typedef struct		s_disk
 typedef struct		s_cam
 {
 	t_vec3			opoint;
-	t_vec3			ray;
-	t_vec3			dir;
-	double			dot_dir;
+	struct s_vec3	**dir;
 }					t_cam;
 
 // typedef struct		s_cl
@@ -157,7 +157,9 @@ int					main(void);
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
 int					which_button(bool *mouse);
-t_color				trace_ray(t_cam ray, t_rt *rt, t_shape *shape, t_light *in_light);
+// t_color				trace_ray(t_cam ray, t_rt *rt, t_shape *shape, t_light *in_light);
+t_color				trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light *is_light);
+
 
 
 int					put_error_sys(char *error);
@@ -178,7 +180,12 @@ t_vec3				cross_scalar(t_vec3 vect, double scalar);
 
 t_disk				sphere_intersect(t_shape shape, t_vec3 cam,
 						t_vec3 direction);
-t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
+// t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
+
+t_disk				plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm);
+t_disk				cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction);
+
+
 double				find_intensity(t_vec3 intersect, t_light *is_light,
 						t_vec3 norm, int max_light);
 double				light(t_vec3 intersect, t_vec3 l_point,

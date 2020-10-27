@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/26 21:09:54 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/27 23:39:54 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 	double	result = INFINITY;
 	t_vec3	norm;
 	t_vec3	intersect;
+	double	shine = 0;
+	double temp = 0;
+
 
 	while (i < rt->max_shape)
 	{
@@ -98,8 +101,8 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 			intersect = addition3(opoint, cross_scalar(dir, result));
 			if (shape[i].type == e_plane)
 			{
-				if (!(mod3(subtraction3(intersect, shape[i].center)) <= shape[i].rad))
-					intersect = (t_vec3){INFINITY, INFINITY, INFINITY};
+				// if (!(mod3(subtraction3(intersect, shape[i].center)) <= shape[i].rad))
+				// 	intersect = (t_vec3){INFINITY, INFINITY, INFINITY};
 				norm = shape[i].norm;
 			}
 			else if (shape[i].type == e_sphere)
@@ -107,16 +110,12 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 			else if (shape[i].type == e_cilindr)
 			{
 				double m = dot3(dir, shape[i].axis) * point.t1 + dot3(subtraction3(opoint, shape[i].center), shape[i].axis);
-				// if (!(fabs(m) <= 10))
-				// 	return ((t_color){0, 0, 0});
 				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m)));
 			}
 			else if (shape[i].type == e_conus)
 			{
-				// return ((t_color){0, 10, 50});
 				double m = dot3(dir, shape[i].axis) * point.t1 + dot3(subtraction3(opoint, shape[i].center), shape[i].axis);
 				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m * (1 + shape[i].pow_k))));
-				// norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(cross_scalar(shape[i].axis, (1 + k * k)), m)));
 			}
 		}
 		if (point.t2 < result && (point.t2 > rt->limit.x || point.t2 < rt->limit.y))
@@ -129,28 +128,52 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 			else if (shape[i].type == e_cilindr)
 			{
 				double m = dot3(dir, shape[i].axis) * point.t2 + dot3(subtraction3(opoint, shape[i].center), shape[i].axis);
-				// if (!(fabs(m) <= 5))
-				//	return ((t_color){0, 0, 0});
 				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m)));
 			}
 			else if (shape[i].type == e_conus)
 			{
-				// return ((t_color){0, 10, 50});
 				double m = dot3(dir, shape[i].axis) * point.t2 + dot3(subtraction3(opoint, shape[i].center), shape[i].axis);
 				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m * (1 + shape[i].pow_k))));
-				// norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(cross_scalar(shape[i].axis, (1 + k * k)), m)));
 			}
 		}
 		i++;
 	}
-	if (result == INFINITY)
+	if (result == INFINITY ||
+		(intersect.x == INFINITY &&
+		intersect.y == INFINITY &&
+		intersect.z == INFINITY))
 		return ((t_color){0, 0, 0});
-	if (intersect.x != INFINITY &&
-		intersect.y != INFINITY &&
-		intersect.z != INFINITY)
-		color = mix_color(color, find_intensity(intersect, is_light, norm, rt->max_light));
 	else
-		return ((t_color){0, 0, 0});
+	{
+		double intensity = find_intensity(intersect, is_light, norm, rt->max_light);
+		double s = 100;
+		if (s != -1)
+		{
+			// norm = normalize(norm);
+			t_vec3 lvec = normalize(subtraction3(is_light[0].dir, intersect));
+			t_vec3 inv_dir = normalize(cross_scalar(dir, -1.));
+
+			double proj = dot3(lvec, norm);
+
+			t_vec3 a = addition3(cross_scalar(norm, proj), cross_scalar(lvec, -1));
+			t_vec3 r = addition3(cross_scalar(norm, proj), a);
+			temp = dot3(r, inv_dir);
+			shine = pow (temp, s);
+		}
+		color = mix_color(color, intensity);
+		if (temp >= 0.)
+		{
+			t_vec3 a = (t_vec3){color.red, color.green, color.blue};
+			t_vec3 b = (t_vec3){255, 255, 255};
+
+			a = cross_scalar(a, 1. - shine);
+			b = cross_scalar(b, shine);
+
+			t_vec3 c = addition3(a, b);
+			color = (t_color){c.x, c.y, c.z};
+		}
+		
+	}
 	return (color);
 }
 

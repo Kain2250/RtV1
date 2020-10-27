@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/26 21:11:18 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/27 20:33:12 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ void		keyboard_events(t_rt *rt, SDL_Keycode sym)
 		rt->shapes[0].center.z -= 0.5;
 
 	else if (sym == SDLK_i)
-		rt->light[1].dir.y += 0.9;
+		rt->light[0].dir.y += 0.9;
 	else if (sym == SDLK_k)
-		rt->light[1].dir.y -= 0.9;
+		rt->light[0].dir.y -= 0.9;
 	else if (sym == SDLK_j)
-		rt->light[1].dir.x -= 0.9;
+		rt->light[0].dir.x -= 0.9;
 	else if (sym == SDLK_l)
-		rt->light[1].dir.x += 0.9;
+		rt->light[0].dir.x += 0.9;
 	else if (sym == SDLK_u)
-		rt->light[1].dir.z -= 0.9;
+		rt->light[0].dir.z -= 0.9;
 	else if (sym == SDLK_o)
-		rt->light[1].dir.z += 0.9;
+		rt->light[0].dir.z += 0.9;
 	
 	else if (sym == SDLK_8)
 		rt->light[0].on = !rt->light[0].on;

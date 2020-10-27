@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/26 20:28:41 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/27 21:31:19 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define WIN_WIDTH 600
 # define WIN_HEIGHT 600
 # define NAME_WIN "RTV by Bdrinkin"
+
 
 typedef enum		s_e_light_type
 {
@@ -153,6 +154,14 @@ typedef struct		s_rt
 	int				y;
 }					t_rt;
 
+typedef struct		s_sub_find_intensity
+{
+	t_vec3		intersect;
+	t_light		*is_light;
+	t_vec3		norm;
+	int			max_light;
+}					t_sub_find_intensity;
+
 int					main(void);
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
@@ -186,8 +195,7 @@ t_disk				plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm)
 t_disk				cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction);
 
 
-double				find_intensity(t_vec3 intersect, t_light *is_light,
-						t_vec3 norm, int max_light);
+double				find_intensity(t_vec3 intersect, t_light *is_light, t_vec3 norm, int max_light);
 double				light(t_vec3 intersect, t_vec3 l_point,
 						t_vec3 norm, double intensity);
 t_vec3				equation_variable(t_vec3 direction, t_vec3 cam_center);

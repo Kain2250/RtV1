@@ -6,14 +6,13 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 22:23:21 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/26 20:58:21 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/27 21:31:31 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-double		find_intensity(t_vec3 intersect, t_light *is_light,
-							t_vec3 norm, int max_light)
+double		find_intensity(t_vec3 intersect, t_light *is_light, t_vec3 norm, int max_light)
 {
 	double	intensity;
 	int		i;
@@ -27,8 +26,10 @@ double		find_intensity(t_vec3 intersect, t_light *is_light,
 		if (is_light[i].type == e_ambient)
 			intensity += is_light[i].intens;
 		else if (is_light[i].type == e_point)
+		{
 			intensity += light(intersect, is_light[i].dir,
 				norm, is_light[i].intens);
+		}
 		else
 			intensity += is_light[i].intens;
 	}

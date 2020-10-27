@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 08:30:01 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/25 20:51:49 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/27 18:47:46 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool			init_sdl(t_rt *rt)
 			WIN_HEIGHT, SDL_WINDOW_SHOWN)) == NULL)
 		return (false);
 	if ((rt->sdl.screen = SDL_CreateRenderer(rt->sdl.window, 0,
-			SDL_RENDERER_SOFTWARE)) == NULL)
+			SDL_RENDERER_ACCELERATED)) == NULL)
 		return (false);
 	SDL_GetWindowSize(rt->sdl.window, &rt->sdl.win_width, &rt->sdl.win_hight);
 	// SDL_SetRelativeMouseMode(true);

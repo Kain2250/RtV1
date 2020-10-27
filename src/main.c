@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/26 21:08:07 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/27 22:45:54 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_cam(t_rt *rt)
 {
 	rt->limit = (t_point){0, 1000};
 
-	rt->max_shape = 5;
+	rt->max_shape = 8;
 	//Сфера
 	rt->shapes = ft_memalloc(sizeof(t_shape) * rt->max_shape);
 	rt->shapes[0].center = (t_vec3){-3., 0., 6.};
@@ -33,53 +33,74 @@ void	init_cam(t_rt *rt)
 	rt->shapes[0].type = e_sphere;
 	//Цилиндр
 	rt->shapes[1].center = (t_vec3){3., 0., 6.};
-	rt->shapes[1].axis = normalize((t_vec3){0., 1., 0.});
+	rt->shapes[1].axis = normalize((t_vec3){0.5, 0.5, 0.});
 	rt->shapes[1].color = (t_color){25, 100, 5};
 	rt->shapes[1].rad = 1.f;
 	rt->shapes[1].specular = 0;
 	rt->shapes[1].type = e_cilindr;
 	//Плоскость
-	rt->shapes[2].center = (t_vec3){0, 5, 0};
+	rt->shapes[2].center = (t_vec3){0., 0., 10.};
 	rt->shapes[2].color = (t_color){255, 255, 255};
 	rt->shapes[2].rad = INFINITY;
 	rt->shapes[2].specular = 0;
-	rt->shapes[2].norm = (t_vec3){0.2, -1, 0.};
+	rt->shapes[2].norm = (t_vec3){0., 0., -1.};
 	rt->shapes[2].type = e_plane;
-	//Плоскость
-	rt->shapes[3].center = (t_vec3){0, -5, 0};
-	rt->shapes[3].color = (t_color){255, 255, 0};
+		//Плоскость
+	rt->shapes[3].center = (t_vec3){0., -6., 0.};
+	rt->shapes[3].color = (t_color){255, 255, 255};
 	rt->shapes[3].rad = INFINITY;
 	rt->shapes[3].specular = 0;
-	rt->shapes[3].norm = (t_vec3){0, 1, 0};
+	rt->shapes[3].norm = (t_vec3){0., 1., 0.};
 	rt->shapes[3].type = e_plane;
-	//Конус
-	rt->shapes[4].center = (t_vec3){0., 0., 6.};
-	rt->shapes[4].axis = normalize((t_vec3){0., 1., 0.});
-	rt->shapes[4].color = (t_color){0, 100, 150};
-	rt->shapes[4].k = tan(M_PI / 10);
-	rt->shapes[4].pow_k = rt->shapes[4].k * rt->shapes[4].k;
+	//Плоскость
+	rt->shapes[4].center = (t_vec3){0., 6., 0.};
+	rt->shapes[4].color = (t_color){255, 255, 255};
+	rt->shapes[4].rad = INFINITY;
 	rt->shapes[4].specular = 0;
-	rt->shapes[4].type = e_conus;
+	rt->shapes[4].norm = (t_vec3){0., -1., 0.};
+	rt->shapes[4].type = e_plane;
+	//Плоскость
+	rt->shapes[5].center = (t_vec3){-6, 0, 0};
+	rt->shapes[5].color = (t_color){255, 255, 0};
+	rt->shapes[5].rad = INFINITY;
+	rt->shapes[5].specular = 0;
+	rt->shapes[5].norm = (t_vec3){1, 0, 0};
+	rt->shapes[5].type = e_plane;
+	//Плоскость
+	rt->shapes[6].center = (t_vec3){6, 0, 0};
+	rt->shapes[6].color = (t_color){255, 255, 0};
+	rt->shapes[6].rad = INFINITY;
+	rt->shapes[6].specular = 0;
+	rt->shapes[6].norm = (t_vec3){-1, 0, 0};
+	rt->shapes[6].type = e_plane;
+	//Конус
+	rt->shapes[7].center = (t_vec3){0., -5., 6.};
+	rt->shapes[7].axis = normalize((t_vec3){1., 0., 0.});
+	rt->shapes[7].color = (t_color){0, 100, 150};
+	rt->shapes[7].k = tan(M_PI / 10);
+	rt->shapes[7].pow_k = rt->shapes[4].k * rt->shapes[4].k;
+	rt->shapes[7].specular = 0;
+	rt->shapes[7].type = e_conus;
 	
 	//Свет
-	rt->max_light = 3;
+	rt->max_light = 1;
 	rt->light = ft_memalloc(sizeof(t_light) * rt->max_light);
 	//Направленый свет
-	rt->light[1].dir = (t_vec3){0.5, 0.5, 0.};
-	rt->light[1].intens = 0.7;
-	rt->light[1].on = true;
-	rt->light[1].type = e_point;
-	//Направленый свет
-	rt->light[2].dir = (t_vec3){0., 0.5, -0.5};
-	rt->light[2].intens = 0.2;
-	rt->light[2].on = true;
-	rt->light[2].type = e_point;
-	//Эмбиент
-	rt->light[0].type = e_ambient;
-	rt->light[0].intens = 0.08;
+	rt->light[0].dir = (t_vec3){0.5, 0.5, 0.};
+	rt->light[0].intens = 0.7;
 	rt->light[0].on = true;
+	rt->light[0].type = e_point;
+	// // Направленый свет
+	// rt->light[2].dir = (t_vec3){0., 0.5, -0.5};
+	// rt->light[2].intens = 0.2;
+	// rt->light[2].on = true;
+	// rt->light[2].type = e_point;
+	// //Эмбиент
+	// rt->light[0].type = e_ambient;
+	// rt->light[0].intens = 0.08;
+	// rt->light[0].on = true;
 	
-	rt->cam.opoint = (t_vec3){0., 0., -2.};
+	rt->cam.opoint = (t_vec3){0., 0., -10.};
 	t_vec3 ray;
 	ray.z = rt->cam.opoint.z + 1;
 	// rt->cam.ray.x = 0;

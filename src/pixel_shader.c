@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pixel_shader.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 11:55:54 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/28 19:28:44 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,6 @@ double		light(t_vec3 intersect, t_vec3 l_point,
 
 	lvec = normalize(subtraction3(l_point, intersect));
 	return (intensity * clamp(dot3(lvec, norm), 0, 1));
-}
-
-t_disk		conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction)
-{
-	t_vec3	x;
-	t_vec4	var;
-	double	d_v;
-	double	d_x;
-	double	sq;
-
-	x = subtraction3(opoint, shape.center);
-	d_v = dot3(direction, shape.axis);
-	d_x = dot3(x, shape.axis);
-	var.a = dot3(direction, direction) - (1 + shape.pow_k) * pow(d_v, 2);
-	var.b = 2 * (dot3(direction, x) - (1 + shape.pow_k) * d_v * d_x);
-	var.c = dot3(x, x) - (1 + shape.pow_k) * pow(d_x, 2);
-	var.d = var.b * var.b - 4 * var.a * var.c;
-	if (var.d < 0)
-		return ((t_disk){INFINITY, INFINITY});
-	else
-	{
-		sq = sqrt(var.d);
-		return ((t_disk){
-		(-var.b + sq) / (2 * var.a),
-		(-var.b - sq) / (2 * var.a)});
-	}
 }
 
 t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light *is_light)
@@ -184,6 +158,142 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 	}
 	return (color);
 }
+
+t_disk		disk_of_shapes(t_vec3 dir, t_vec3 opoint, t_shape shape)
+{
+	t_disk	point;
+
+	if (shape.type == e_sphere)
+		point = sphere_intersect(shape, opoint, dir);
+	else if (shape.type == e_conus)
+		point = conus_intersect(shape, opoint, dir);
+	else if (shape.type == e_cilindr)
+		point = cylinder_intersect(shape, opoint, dir);
+	else
+		point = plane_intersect(opoint, dir, shape.center, shape.norm);
+	return (point);
+}
+
+t_intersect		ray_intersect(t_vec3 dir, t_vec3 opoint,
+					t_shape *shape, int count_shape)
+{
+	int			i;
+	t_disk		point;
+	double		lengh_ray;
+	t_intersect	param;
+
+	i = -1;
+	lengh_ray = INFINITY;
+	while (++i < count_shape)
+	{
+		point = disk_of_shapes(dir, opoint, shape[i]);
+		if (point.t1 < lengh_ray || point.t2 < lengh_ray)
+		{
+			if (point.t1 < lengh_ray)
+				lengh_ray = point.t1;
+			else if (point.t2 < lengh_ray)
+				lengh_ray = point.t2;
+			else
+				continue ;
+			param.intersect = addition3(opoint, cross_scalar(dir, lengh_ray));
+			param.iter = i;
+			param.point = point;
+			param.shine = shape->specular;
+			color_fill(&param.color, shape[i].color);
+		}
+	}
+	return (param);
+}
+
+t_vec3		plane_limiter(t_vec3 intersect, t_shape shape)
+{
+	if (!(mod3(subtraction3(intersect, shape.center)) <= shape.rad))
+		return ((t_vec3){INFINITY, INFINITY, INFINITY});
+	return (intersect);
+}
+
+t_vec3		surface_norm(t_intersect param, t_shape shape,
+				t_vec3 opoint, t_vec3 dir)
+{
+	t_vec3	norm;
+	double	m;
+
+	norm = shape.norm;
+	if (shape.type == e_cilindr || shape.type == e_conus)
+		m = dot3(dir, shape.axis) *
+			param.point.t1 <= param.point.t2 ? param.point.t2 : param.point.t1 +
+			dot3(subtraction3(opoint, shape.center), shape.axis);
+	if (shape.type == e_sphere)
+		norm = normalize(subtraction3(param.intersect, shape.center));
+	else if (shape.type == e_cilindr)
+		norm = normalize(subtraction3(subtraction3(param.intersect,
+			shape.center), cross_scalar(shape.axis, m)));
+	else if (shape.type == e_conus)
+		norm = normalize(subtraction3(subtraction3(param.intersect,
+			shape.center), cross_scalar(shape.axis, m * (1 + shape.pow_k))));
+	return (norm);
+}
+
+t_color		lighting_calculation(t_intersect param, t_light *light,
+				t_vec3 norm, t_vec3 dir)
+{
+	t_color	color;
+	int		i;
+	double	proj;
+	t_vec3	lvec;
+	double	temp;
+	t_vec3	a;
+	t_vec3	r;
+	double	s;
+	
+	if (param.color.red == 0 && param.color.green == 0 && param.color.blue == 0)
+		return ((t_color){0, 0, 0});
+	color = mix_color(param.color, find_intensity(param.intersect, light, norm, light->max_light));
+	i = 0;
+	while (i < light->max_light)
+	{
+		if (light[i].type == e_point && light[i].on == true)
+		{
+			temp = 0;
+			s = light[i].intens;
+			if (s != -1)
+			{
+				lvec = normalize(subtraction3(light[i].dir, param.intersect));
+				proj = dot3(lvec, norm);
+				a = addition3(cross_scalar(norm, proj), cross_scalar(lvec, -1));
+				r = addition3(cross_scalar(norm, proj), a);
+				temp = dot3(r, normalize(cross_scalar(dir, -1.)));
+				param.shine = pow (temp, s);
+			}
+			if (temp >= 0.)
+			{
+				a = (t_vec3){color.red, color.green, color.blue};
+				t_vec3 b = (t_vec3){255, 255, 255};
+				a = cross_scalar(a, 1. - param.shine);
+				b = cross_scalar(b, param.shine);
+				t_vec3 c = addition3(a, b);
+				color = (t_color){c.x, c.y, c.z};
+			}
+		}
+		i++;
+	}
+	return (color);
+
+}
+
+t_color		pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt)
+{
+	t_intersect	param;
+	t_vec3		norm;
+	t_color		color;
+
+	param = ray_intersect(dir, opoint, rt->shapes, rt->max_shape);
+	norm = surface_norm(param, rt->shapes[param.iter], opoint, dir);
+	// color_fill(&color, param.color);
+	color = lighting_calculation(param, rt->light, norm, dir);
+	return (color);
+}
+
 
 // void		coleidoscope(t_rt *rt, t_point pixel, t_vec3 a)
 // {

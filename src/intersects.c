@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 22:23:21 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/27 21:31:31 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/28 19:26:46 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,32 @@ t_disk		sphere_intersect(t_shape shape,
 	point.t1 = (-sphere.y + diskr[1]) / diskr[2];
 	point.t2 = (-sphere.y - diskr[1]) / diskr[2];
 	return (point);
+}
+
+t_disk		conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction)
+{
+	t_vec3	x;
+	t_vec4	var;
+	double	d_v;
+	double	d_x;
+	double	sq;
+
+	x = subtraction3(opoint, shape.center);
+	d_v = dot3(direction, shape.axis);
+	d_x = dot3(x, shape.axis);
+	var.a = dot3(direction, direction) - (1 + shape.pow_k) * pow(d_v, 2);
+	var.b = 2 * (dot3(direction, x) - (1 + shape.pow_k) * d_v * d_x);
+	var.c = dot3(x, x) - (1 + shape.pow_k) * pow(d_x, 2);
+	var.d = var.b * var.b - 4 * var.a * var.c;
+	if (var.d < 0)
+		return ((t_disk){INFINITY, INFINITY});
+	else
+	{
+		sq = sqrt(var.d);
+		return ((t_disk){
+		(-var.b + sq) / (2 * var.a),
+		(-var.b - sq) / (2 * var.a)});
+	}
 }
 
 t_disk		plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm)

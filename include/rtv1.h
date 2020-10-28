@@ -3,25 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 11:59:58 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/28 19:48:16 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RTV1_H
 # define RTV1_H
 
-# ifdef linux
+# ifdef __linux__
 # include "SDL2/SDL.h"
 # include "SDL2/SDL_image.h"
 # include "SDL2/SDL_ttf.h"
-# endif
-# ifdef darwin
+# include <CL/cl.h>
+# elif __APPLE__
 # include "SDL.h"
 # include "SDL_image.h"
 # include "SDL_ttf.h"
+# include <OpenCL/cl.h>
 # endif
 # include "libft.h"
 # include "errorout.h"
@@ -29,9 +30,9 @@
 # include <math.h>
 // # include <CL/cl.h>
 
-# define WIN_WIDTH 300
-# define WIN_HEIGHT 300
-# define NAME_WIN "RTV by Bdrinkin"
+# define WIN_WIDTH 500
+# define WIN_HEIGHT 500
+# define NAME_WIN "RTV by Bdrinkin & Ecelsa"
 
 
 typedef enum		s_e_light_type
@@ -48,6 +49,12 @@ typedef enum		s_e_shape
 	e_cilindr,
 	e_plane
 }					t_e_shape;
+
+typedef struct		s_disk
+{
+	double			t1;
+	double			t2;
+}					t_disk;
 
 typedef struct		s_point
 {
@@ -85,6 +92,7 @@ typedef struct		s_mouse
 	int				y;
 }					t_mouse;
 
+
 typedef struct		s_color
 {
 	uint8_t			red;
@@ -99,6 +107,8 @@ typedef struct		s_sdl
 	SDL_Event		event;
 	int				win_hight;
 	int				win_width;
+	int				win_hight_old;
+	int				win_width_old;
 }					t_sdl;;
 
 typedef struct		s_shape
@@ -114,11 +124,6 @@ typedef struct		s_shape
 	double			pow_k;
 }					t_shape;
 
-typedef struct		s_disk
-{
-	double			t1;
-	double			t2;
-}					t_disk;
 
 
 typedef struct		s_cam
@@ -127,15 +132,15 @@ typedef struct		s_cam
 	struct s_vec3	**dir;
 }					t_cam;
 
-// typedef struct		s_cl
-// {
-// 	cl_platform_id	platform_id;
-// 	cl_uint			num_platform;
-// 	cl_device_id 	devices_id;
-// 	cl_uint			num_devices;
-// 	cl_context		context;
-// 	cl_command_queue	command_queue;
-// }					t_cl;
+typedef struct		s_cl
+{
+	cl_platform_id	platform_id;
+	cl_uint			num_platform;
+	cl_device_id 	devices_id;
+	cl_uint			num_devices;
+	cl_context		context;
+	cl_command_queue	command_queue;
+}					t_cl;
 
 typedef struct		s_light
 {
@@ -143,6 +148,7 @@ typedef struct		s_light
 	double			intens;
 	uint8_t			type;
 	t_color			color;
+	int				max_light;
 	bool			on;
 }					t_light;
 
@@ -161,15 +167,19 @@ typedef struct		s_rt
 	int				y;
 }					t_rt;
 
-typedef struct		s_sub_find_intensity
+typedef struct		s_intersect
 {
-	t_vec3		intersect;
-	t_light		*is_light;
-	t_vec3		norm;
-	int			max_light;
-}					t_sub_find_intensity;
+	t_vec3			intersect;
+	int				iter;
+	t_disk			point;
+	t_color			color;
+	double			shine;
+}					t_intersect;
 
 int					main(void);
+
+void				cache_cam(t_rt *rt);
+
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
 int					which_button(bool *mouse);
@@ -197,7 +207,7 @@ t_vec3				cross_scalar(t_vec3 vect, double scalar);
 t_disk				sphere_intersect(t_shape shape, t_vec3 cam,
 						t_vec3 direction);
 // t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
-
+t_disk				conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction);
 t_disk				plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm);
 t_disk				cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction);
 
@@ -209,7 +219,7 @@ t_vec3				equation_variable(t_vec3 direction, t_vec3 cam_center);
 
 
 void				coleidoscope(t_rt *rt, t_point pixel, t_vec3 a);
-void				pixel_shader(t_rt *rt, t_point pixel, t_vec3 dir);
+t_color				pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt);
 void				shading(t_rt *rt);
 
 #endif

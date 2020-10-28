@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 11:23:42 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/28 14:33:31 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ void		keyboard_events(t_rt *rt, SDL_Keycode sym)
 		rt->x -= 1;
 	else if (sym == SDLK_RIGHT)
 		rt->x += 1;
-
-
 }
 
 void		event_list(t_rt *rt)
@@ -111,5 +109,13 @@ void		event_list(t_rt *rt)
 			mouse_events(rt);
 		else if (rt->sdl.event.type == SDL_KEYDOWN)
 			keyboard_events(rt, rt->sdl.event.key.keysym.sym);
+	}
+	SDL_GetWindowSize(rt->sdl.window, &rt->sdl.win_width, &rt->sdl.win_hight);
+	if (rt->sdl.win_width != rt->sdl.win_width_old ||
+		rt->sdl.win_hight != rt->sdl.win_hight_old)
+	{
+		cache_cam(rt);
+		rt->sdl.win_width_old = rt->sdl.win_width;
+		rt->sdl.win_hight_old = rt->sdl.win_hight;
 	}
 }

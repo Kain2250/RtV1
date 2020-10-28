@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_sdl.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 08:30:01 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 11:33:03 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/28 20:17:37 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,17 @@
 
 // 	if (clGetPlatformIDs(1, &rt->cl.platform_id, &rt->cl.num_platform) != 0)
 // 		return (false);
-// 	if (clGetDeviceIDs(rt->cl.platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &rt->cl.devices_id, rt->cl.num_devices) != 0)
+// 	if (clGetDeviceIDs(rt->cl.platform_id, CL_DEVICE_TYPE_GPU, 1, &rt->cl.devices_id, rt->cl.num_devices) != 0)
 // 		return (false);
 // 	rt->cl.context = clCreateContext(NULL, 1, &rt->cl.devices_id, NULL, NULL, &ret);
+// 	if (ret != 0)
+// 		return (false);
 // 	rt->cl.command_queue = clCreateCommandQueue(rt->cl.context, rt->cl.devices_id, 0, &ret);
+// 	if (ret != 0)
+// 		return (false)
 // 	return (true);
 // }
+
 
 bool			init_sdl(t_rt *rt)
 {
@@ -39,6 +44,8 @@ bool			init_sdl(t_rt *rt)
 			SDL_RENDERER_ACCELERATED)) == NULL)
 		return (false);
 	SDL_GetWindowSize(rt->sdl.window, &rt->sdl.win_width, &rt->sdl.win_hight);
+	rt->sdl.win_width_old = rt->sdl.win_width;
+	rt->sdl.win_hight_old = rt->sdl.win_hight;
 	// SDL_SetRelativeMouseMode(true);
 	return (true);
 }

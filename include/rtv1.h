@@ -6,7 +6,7 @@
 /*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 09:10:31 by kain2250         ###   ########.fr       */
+/*   Updated: 2020/10/28 11:59:58 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 # include <math.h>
 // # include <CL/cl.h>
 
-# define WIN_WIDTH 600
-# define WIN_HEIGHT 600
+# define WIN_WIDTH 300
+# define WIN_HEIGHT 300
 # define NAME_WIN "RTV by Bdrinkin"
 
 

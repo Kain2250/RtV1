@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/27 20:33:12 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/28 11:23:42 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ void		keyboard_events(t_rt *rt, SDL_Keycode sym)
 	else if (sym == SDLK_DOWN)
 		rt->y -= 0.5;
 	else if (sym == SDLK_LEFT)
-		rt->x -= 0.5;
+		rt->x -= 1;
 	else if (sym == SDLK_RIGHT)
-		rt->x += 0.5;
+		rt->x += 1;
 
 
 }

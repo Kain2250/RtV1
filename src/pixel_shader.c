@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pixel_shader.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/27 23:39:54 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/28 11:55:54 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 			point = cylinder_intersect(shape[i], opoint, dir);
 		else
 			point = plane_intersect(opoint, dir, shape[i].center, shape[i].norm);
-		if (point.t1 < result && (point.t1 > rt->limit.x || point.t1 < rt->limit.y))
+		if (point.t1 < result)// && (point.t1 > rt->limit.x || point.t1 < rt->limit.y))
 		{
 			result = point.t1;
 			color_fill(&color, shape[i].color);
@@ -118,7 +118,7 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 				norm = normalize(subtraction3(subtraction3(intersect, shape[i].center), cross_scalar(shape[i].axis, m * (1 + shape[i].pow_k))));
 			}
 		}
-		if (point.t2 < result && (point.t2 > rt->limit.x || point.t2 < rt->limit.y))
+		if (point.t2 < result)// && (point.t2 > rt->limit.x || point.t2 < rt->limit.y))
 		{
 			result = point.t2;
 			color_fill(&color, shape[i].color);
@@ -146,31 +146,39 @@ t_color		trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light 
 	else
 	{
 		double intensity = find_intensity(intersect, is_light, norm, rt->max_light);
-		double s = 100;
-		if (s != -1)
-		{
-			// norm = normalize(norm);
-			t_vec3 lvec = normalize(subtraction3(is_light[0].dir, intersect));
-			t_vec3 inv_dir = normalize(cross_scalar(dir, -1.));
-
-			double proj = dot3(lvec, norm);
-
-			t_vec3 a = addition3(cross_scalar(norm, proj), cross_scalar(lvec, -1));
-			t_vec3 r = addition3(cross_scalar(norm, proj), a);
-			temp = dot3(r, inv_dir);
-			shine = pow (temp, s);
-		}
 		color = mix_color(color, intensity);
-		if (temp >= 0.)
+		i = 0;
+		while (i < rt->max_light)
 		{
-			t_vec3 a = (t_vec3){color.red, color.green, color.blue};
-			t_vec3 b = (t_vec3){255, 255, 255};
+			if (rt->light[i].type == e_point && rt->light[i].on == true)
+			{
+				temp = 0;
+				double s = rt->light[i].intens * rt->x;
+				if (s != -1)
+				{
+					t_vec3 lvec = normalize(subtraction3(is_light[i].dir, intersect));
+					t_vec3 inv_dir = normalize(cross_scalar(dir, -1.));
 
-			a = cross_scalar(a, 1. - shine);
-			b = cross_scalar(b, shine);
+					double proj = dot3(lvec, norm);
 
-			t_vec3 c = addition3(a, b);
-			color = (t_color){c.x, c.y, c.z};
+					t_vec3 a = addition3(cross_scalar(norm, proj), cross_scalar(lvec, -1));
+					t_vec3 r = addition3(cross_scalar(norm, proj), a);
+					temp = dot3(r, inv_dir);
+					shine = pow (temp, s);
+				}
+				if (temp >= 0.)
+				{
+					t_vec3 a = (t_vec3){color.red, color.green, color.blue};
+					t_vec3 b = (t_vec3){255, 255, 255};
+
+					a = cross_scalar(a, 1. - shine);
+					b = cross_scalar(b, shine);
+
+					t_vec3 c = addition3(a, b);
+					color = (t_color){c.x, c.y, c.z};
+				}
+			}
+			i++;
 		}
 		
 	}

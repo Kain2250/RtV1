@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_sdl.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 08:30:01 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/27 18:47:46 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/28 11:33:03 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool			init_sdl(t_rt *rt)
 		return (false);
 	if ((rt->sdl.window = SDL_CreateWindow(NAME_WIN, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_WIDTH,
-			WIN_HEIGHT, SDL_WINDOW_SHOWN)) == NULL)
+			WIN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE)) == NULL)
 		return (false);
 	if ((rt->sdl.screen = SDL_CreateRenderer(rt->sdl.window, 0,
 			SDL_RENDERER_ACCELERATED)) == NULL)
@@ -43,29 +43,9 @@ bool			init_sdl(t_rt *rt)
 	return (true);
 }
 
-bool			init_sdl_image(t_rt *rt)
-{
-	if (!(IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG))
-		return (false);
-	(void)rt;
-	return (true);
-}
-
-bool			init_sdl_ttf(t_rt *rt)
-{
-	if (TTF_Init() == -1)
-		return (false);
-	(void)rt;
-	return (true);
-}
-
 bool			init_lib_sdl(t_rt *rt)
 {
 	if (init_sdl(rt) == false)
 		return (put_error_sdl(ERR_INIT_SDL, SDL_GetError()));
-	if (init_sdl_image(rt) == false)
-		return (put_error_sdl(ERR_INIT_IMG, IMG_GetError()));
-	if (init_sdl_ttf(rt) == false)
-		return (put_error_sdl(ERR_INIT_TTF, TTF_GetError()));
 	return (true);
 }

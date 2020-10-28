@@ -3,20 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/27 21:31:19 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/28 09:10:31 by kain2250         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RTV1_H
 # define RTV1_H
 
-# include "libft.h"
+# ifdef linux
+# include "SDL2/SDL.h"
+# include "SDL2/SDL_image.h"
+# include "SDL2/SDL_ttf.h"
+# endif
+# ifdef darwin
 # include "SDL.h"
 # include "SDL_image.h"
 # include "SDL_ttf.h"
+# endif
+# include "libft.h"
 # include "errorout.h"
 # include <stdbool.h>
 # include <math.h>

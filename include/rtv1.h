@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 19:48:16 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/29 20:29:32 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ typedef struct		s_intersect
 {
 	t_vec3			intersect;
 	int				iter;
-	t_disk			point;
+	double			point;
 	t_color			color;
 	double			shine;
 }					t_intersect;
@@ -204,12 +204,12 @@ t_vec3				cross(t_vec3 a, t_vec3 b);
 void				clear_surface(SDL_Surface *surface, Uint32 color);
 t_vec3				cross_scalar(t_vec3 vect, double scalar);
 
-t_disk				sphere_intersect(t_shape shape, t_vec3 cam,
+double				sphere_intersect(t_shape shape, t_vec3 cam,
 						t_vec3 direction);
 // t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
-t_disk				conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction);
-t_disk				plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm);
-t_disk				cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction);
+double				conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction);
+double				plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm);
+double				cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction);
 
 
 double				find_intensity(t_vec3 intersect, t_light *is_light, t_vec3 norm, int max_light);
@@ -221,5 +221,8 @@ t_vec3				equation_variable(t_vec3 direction, t_vec3 cam_center);
 void				coleidoscope(t_rt *rt, t_point pixel, t_vec3 a);
 t_color				pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt);
 void				shading(t_rt *rt);
+
+double				ft_min_d(double v1, double v2);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 22:23:21 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 19:26:46 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/29 21:44:51 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ t_vec3		equation_variable(t_vec3 direction, t_vec3 cam_center)
 	return (equation);
 }
 
-t_disk		cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction)
+double		cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction)
 {
 	t_vec3	x;
 	t_vec4	var;
 	double	d_v;
 	double	d_x;
-	double	sq;
+	double	sq[3];
 
 	x = subtraction3(cam, shape.center);
 	d_v = dot3(direction, shape.axis);
@@ -62,17 +62,17 @@ t_disk		cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction)
 	var.c = dot3(x, x) - pow(d_x, 2.) - shape.rad * shape.rad;
 	var.d = var.b * var.b - 4 * var.a * var.c;
 	if (var.d < 0)
-		return ((t_disk){INFINITY, INFINITY});
+		return (INFINITY);
 	else
 	{
-		sq = sqrt(var.d);
-		return ((t_disk){
-		(-var.b + sq) / (2 * var.a),
-		(-var.b - sq) / (2 * var.a)});
+		sq[0] = sqrt(var.d);
+		sq[1] = (-var.b + sq[0]) / (2 * var.a);
+		sq[2] = (-var.b - sq[0]) / (2 * var.a);
+		return (ft_min_d(sq[1], sq[2]));
 	}
 }
 
-t_disk		sphere_intersect(t_shape shape,
+double		sphere_intersect(t_shape shape,
 				t_vec3 opoint, t_vec3 direction)
 {
 	t_vec3	sphere;
@@ -85,21 +85,21 @@ t_disk		sphere_intersect(t_shape shape,
 	sphere.z -= shape.rad * shape.rad;
 	diskr[0] = sphere.y * sphere.y - 4. * sphere.x * sphere.z;
 	if (diskr[0] < 0)
-		return (point = (t_disk){INFINITY, INFINITY});
+		return (INFINITY);
 	diskr[1] = sqrt(diskr[0]);
 	diskr[2] = 2. * sphere.x;
 	point.t1 = (-sphere.y + diskr[1]) / diskr[2];
 	point.t2 = (-sphere.y - diskr[1]) / diskr[2];
-	return (point);
+	return (ft_min_d(point.t1, point.t2));
 }
 
-t_disk		conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction)
+double		conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction)
 {
 	t_vec3	x;
 	t_vec4	var;
 	double	d_v;
 	double	d_x;
-	double	sq;
+	double	sq[3];
 
 	x = subtraction3(opoint, shape.center);
 	d_v = dot3(direction, shape.axis);
@@ -109,28 +109,27 @@ t_disk		conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction)
 	var.c = dot3(x, x) - (1 + shape.pow_k) * pow(d_x, 2);
 	var.d = var.b * var.b - 4 * var.a * var.c;
 	if (var.d < 0)
-		return ((t_disk){INFINITY, INFINITY});
+		return (INFINITY);
 	else
 	{
-		sq = sqrt(var.d);
-		return ((t_disk){
-		(-var.b + sq) / (2 * var.a),
-		(-var.b - sq) / (2 * var.a)});
+		sq[0] = sqrt(var.d);
+		sq[1] = (-var.b + sq[0]) / (2 * var.a);
+		sq[2] = (-var.b - sq[0]) / (2 * var.a);
+		return (ft_min_d(sq[1], sq[2]));
 	}
 }
 
-t_disk		plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm)
+double		plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm)
 {
-	t_disk	point;
+	double	point;
 	double	a;
 	double	b;
 
 	a = dot3(subtraction3(opoint, center), norm);
 	b = dot3(dir, norm);
-	point.t1 = -(a / b);
-	if (point.t1 < 0.)
-		point.t1 = INFINITY;
-	point.t2 = INFINITY;
+	point = -(a / b);
+	if (point < 0.)
+		point = INFINITY;
 	return (point);
 }
 

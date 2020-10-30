@@ -6,23 +6,11 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 18:26:53 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/30 20:16:46 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-void	rt_free(t_rt *rt)
-{
-	SDL_DestroyRenderer(rt->sdl.screen);
-	SDL_DestroyWindow(rt->sdl.window);
-	free(rt);
-}
-
-double		ft_min_d(double v1, double v2)
-{
-	return ((v1 < v2) ? v1 : v2);
-}
 
 void	init_cam(t_rt *rt)
 {
@@ -206,6 +194,7 @@ void	cache_cam(t_rt *rt)
 		{
 			ray.x = (x - (WIN_WIDTH * 0.5)) / WIN_HEIGHT;
 			rt->cam.dir[y][x] = normalize(subtraction3(ray, rt->cam.opoint));
+			//Поворот базиса
 			// t_vec3 i = normalize((t_vec3){0.99, 0., 0.16});
 			// t_vec3 j = (t_vec3){0, 1, 0};
 			// t_vec3 k = normalize((t_vec3){0.16, 0., -0.99});

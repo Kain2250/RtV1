@@ -1,1 +1,0 @@
-__kernel void       shader_pixel(__global )

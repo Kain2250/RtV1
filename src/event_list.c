@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 17:49:50 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/30 20:09:03 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,85 +39,6 @@ bool			event_exit(t_rt *rt)
 		return (false);
 }
 
-void		keyboard_events(t_rt *rt, SDL_Keycode sym)
-{
-	if (sym == SDLK_w)
-		rt->shapes[0].center.y +=  0.5;
-	else if (sym == SDLK_s)
-		rt->shapes[0].center.y -= 0.5;
-	else if (sym == SDLK_d)
-		rt->shapes[0].center.x += 0.5;
-	else if (sym == SDLK_a)
-		rt->shapes[0].center.x -= 0.5;
-	else if (sym == SDLK_e)
-		rt->shapes[0].center.z += 0.5;
-	else if (sym == SDLK_q)
-		rt->shapes[0].center.z -= 0.5;
-
-	else if (sym == SDLK_i)
-		rt->light[0].dir.y += 0.9;
-	else if (sym == SDLK_k)
-		rt->light[0].dir.y -= 0.9;
-	else if (sym == SDLK_j)
-		rt->light[0].dir.x -= 0.9;
-	else if (sym == SDLK_l)
-		rt->light[0].dir.x += 0.9;
-	else if (sym == SDLK_u)
-		rt->light[0].dir.z -= 0.9;
-	else if (sym == SDLK_o)
-		rt->light[0].dir.z += 0.9;
-	
-	else if (sym == SDLK_8)
-		rt->light[0].on = !rt->light[0].on;
-	else if (sym == SDLK_9)
-		rt->light[1].on = !rt->light[1].on;
-	else if (sym == SDLK_0)
-		rt->light[2].on = !rt->light[2].on;
-
-	else if (sym == SDLK_t)
-		rt->cam.opoint.y += 0.4;
-	else if (sym == SDLK_g)
-		rt->cam.opoint.y -= 0.4;
-	else if (sym == SDLK_f)
-		rt->cam.opoint.x += 0.4;
-	else if (sym == SDLK_h)
-		rt->cam.opoint.x -= 0.4;
-	else if (sym == SDLK_r)
-		rt->cam.opoint.z += 0.4;
-	else if (sym == SDLK_y)
-		rt->cam.opoint.z -= 0.4;
-
-	else if (sym == SDLK_1)
-	{
-		rt->rot[0] += M_PI_180;
-		cache_cam(rt);
-	}
-	else if (sym == SDLK_2)
-	{
-		rt->rot[0] -= 5 * M_PI_180;
-		cache_cam(rt);
-	}
-	else if (sym == SDLK_3)
-	{
-		rt->rot[1] += 5 * M_PI_180;
-		cache_cam(rt);
-	}
-	else if (sym == SDLK_4)
-	{
-		rt->rot[1] -= 5 * M_PI_180;
-		cache_cam(rt);
-	}
-		else if (sym == SDLK_5)
-	{
-		rt->rot[2] += 5 * M_PI_180;
-		cache_cam(rt);
-	}
-	else if (sym == SDLK_6)
-	{
-		rt->rot[2] -= 5 * M_PI_180;
-		cache_cam(rt);
-	}
-}
 
 void		event_list(t_rt *rt)
 {

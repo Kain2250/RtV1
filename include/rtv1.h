@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 18:34:13 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/30 20:17:30 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,32 @@
 # define RTV1_H
 
 # ifdef __linux__
-# include "SDL2/SDL.h"
-# include "SDL2/SDL_image.h"
-# include "SDL2/SDL_ttf.h"
-# include <CL/cl.h>
+#  include "SDL2/SDL.h"
+#  include "SDL2/SDL_image.h"
+#  include "SDL2/SDL_ttf.h"
 # elif __APPLE__
-# include "SDL.h"
-# include "SDL_image.h"
-# include "SDL_ttf.h"
-# include <OpenCL/cl.h>
+#  include "SDL.h"
+#  include "SDL_image.h"
+#  include "SDL_ttf.h"
 # endif
 # include "libft.h"
 # include "errorout.h"
 # include <stdbool.h>
 # include <math.h>
-// # include <CL/cl.h>
 
-# define WIN_WIDTH 50
-# define WIN_HEIGHT 50
+# define WIN_WIDTH 600
+# define WIN_HEIGHT 600
 # define M_PI_180 M_PI / 180
 # define NAME_WIN "RTV by Bdrinkin & Ecelsa"
 
-
-typedef enum		s_e_light_type
+typedef enum		e_light_type
 {
 	e_ambient,
 	e_point,
 	e_sun
 }					t_e_light_type;
 
-typedef enum		s_e_shape
+typedef enum		e_shape
 {
 	e_sphere,
 	e_conus,
@@ -93,7 +89,6 @@ typedef struct		s_mouse
 	int				y;
 }					t_mouse;
 
-
 typedef struct		s_color
 {
 	uint8_t			red;
@@ -110,7 +105,7 @@ typedef struct		s_sdl
 	int				win_width;
 	int				win_hight_old;
 	int				win_width_old;
-}					t_sdl;;
+}					t_sdl;
 
 typedef struct		s_shape
 {
@@ -125,23 +120,11 @@ typedef struct		s_shape
 	double			pow_k;
 }					t_shape;
 
-
-
 typedef struct		s_cam
 {
 	t_vec3			opoint;
 	struct s_vec3	dir[WIN_HEIGHT][WIN_WIDTH];
 }					t_cam;
-
-typedef struct		s_cl
-{
-	cl_platform_id	platform_id;
-	cl_uint			num_platform;
-	cl_device_id 	devices_id;
-	cl_uint			num_devices;
-	cl_context		context;
-	cl_command_queue	command_queue;
-}					t_cl;
 
 typedef struct		s_light
 {
@@ -185,10 +168,8 @@ void				cache_cam(t_rt *rt);
 void				event_list(t_rt *rt);
 void				mouse_events(t_rt *rt);
 int					which_button(bool *mouse);
-// t_color				trace_ray(t_cam ray, t_rt *rt, t_shape *shape, t_light *in_light);
-t_color				trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt, t_shape *shape, t_light *is_light);
-
-
+t_color				trace_ray(t_vec3 dir, t_vec3 opoint, t_rt *rt,
+						t_shape *shape, t_light *is_light);
 
 int					put_error_sys(char *error);
 bool				put_error_sdl(char *error, const char *error_sdl);
@@ -208,24 +189,25 @@ t_vec3				cross_scalar(t_vec3 vect, double scalar);
 
 double				sphere_intersect(t_shape shape, t_vec3 cam,
 						t_vec3 direction);
-// t_disk				plane_intersect(t_cam ray, t_vec3 center, t_vec3 norm);
-double				conus_intersect(t_shape shape, t_vec3 opoint, t_vec3 direction);
-double				plane_intersect(t_vec3 opoint, t_vec3 dir, t_vec3 center, t_vec3 norm);
-double				cylinder_intersect(t_shape shape, t_vec3 cam, t_vec3 direction);
+double				conus_intersect(t_shape shape, t_vec3 opoint,
+						t_vec3 direction);
+double				plane_intersect(t_vec3 opoint, t_vec3 dir,
+						t_vec3 center, t_vec3 norm);
+double				cylinder_intersect(t_shape shape, t_vec3 cam,
+						t_vec3 direction);
 
-
-double				find_intensity(t_vec3 intersect, t_light *is_light, t_vec3 norm, int max_light);
+double				find_intensity(t_vec3 intersect, t_light *is_light,
+						t_vec3 norm, int max_light);
 double				light(t_vec3 intersect, t_vec3 l_point,
 						t_vec3 norm, double intensity);
 t_vec3				equation_variable(t_vec3 direction, t_vec3 cam_center);
-
+void				keyboard_events(t_rt *rt, SDL_Keycode sym);
 
 void				coleidoscope(t_rt *rt, t_point pixel, t_vec3 a);
 t_color				pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt);
 void				shading(t_rt *rt);
-
 double				ft_min_d(double v1, double v2);
-
-void				recache_cam(t_rt * rt);
+void				recache_cam(t_rt *rt);
+void				rt_free(t_rt *rt);
 
 #endif

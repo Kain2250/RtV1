@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/29 22:38:44 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/30 18:26:53 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,77 +27,133 @@ double		ft_min_d(double v1, double v2)
 void	init_cam(t_rt *rt)
 {
 	rt->limit = (t_point){0, 1000};
+	int	i = 0;
 
-	rt->max_shape = 7;
+	rt->max_shape = 5 + 11;
 	//Сфера
 	rt->shapes = ft_memalloc(sizeof(t_shape) * rt->max_shape);
-	rt->shapes[0].center = (t_vec3){-3., 0., 0.};
-	rt->shapes[0].color = (t_color){144, 77, 48};
-	rt->shapes[0].rad = 1.f;
-	rt->shapes[0].specular = 1000.;
-	rt->shapes[0].type = e_sphere;
+	rt->shapes[i].center = (t_vec3){-6., -5., 0.};
+	rt->shapes[i].color = (t_color){0, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){6., -5., 0.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){-6., 5., 0.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){6., 5., 0.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){-6., -5., 18.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){6., -5., 18.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){-6., 5., 18.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 1.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){6., 5., 18.};
+	rt->shapes[i].color = (t_color){144, 77, 48};
+	rt->shapes[i].rad = 2.;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
+
+	rt->shapes[i].center = (t_vec3){0., -3., 0.};
+	rt->shapes[i].color = (t_color){255, 77, 48};
+	rt->shapes[i].rad = 0.5;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_sphere;
 	//Цилиндр
-	rt->shapes[1].center = (t_vec3){3., 0., 6.};
-	rt->shapes[1].axis = normalize((t_vec3){0.2, 1.1, 0.});
-	rt->shapes[1].color = (t_color){25, 100, 5}; 
-	rt->shapes[1].rad = 1.f;
-	rt->shapes[1].specular = 1000.;
-	rt->shapes[1].type = e_cilindr;
+	rt->shapes[i].center = (t_vec3){6., 0., 18.};
+	rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
+	rt->shapes[i].color = (t_color){25, 100, 5}; 
+	rt->shapes[i].rad = 1.f;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_cilindr;
+
+	rt->shapes[i].center = (t_vec3){-6., 0., 18.};
+	rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
+	rt->shapes[i].color = (t_color){25, 100, 5}; 
+	rt->shapes[i].rad = 1.f;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_cilindr;
+
+	rt->shapes[i].center = (t_vec3){6., 0., 0.};
+	rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
+	rt->shapes[i].color = (t_color){25, 100, 5}; 
+	rt->shapes[i].rad = 1.f;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_cilindr;
+
+	rt->shapes[i].center = (t_vec3){-6., 0., 0.};
+	rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
+	rt->shapes[i].color = (t_color){25, 100, 5}; 
+	rt->shapes[i].rad = 1.f;
+	rt->shapes[i].specular = 10.;
+	rt->shapes[i++].type = e_cilindr;
 	//Плоскость
-	rt->shapes[2].center = (t_vec3){0., 1., 9.};
-	rt->shapes[2].color = (t_color){49, 127, 67};
-	rt->shapes[2].rad = INFINITY;
-	rt->shapes[2].specular = 0;
-	rt->shapes[2].norm = (t_vec3){0., 0., -1.};
-	rt->shapes[2].type = e_plane;
-	// //Плоскость
-	rt->shapes[3].center = (t_vec3){0., -9., 0.};
-	rt->shapes[3].color = (t_color){121, 85, 61};
-	rt->shapes[3].rad = INFINITY;
-	rt->shapes[3].specular = 0;
-	rt->shapes[3].norm = (t_vec3){0., 1., 0.};
-	rt->shapes[3].type = e_plane;
-	//Плоскость
-	rt->shapes[4].center = (t_vec3){0., 9., 0.};
-	rt->shapes[4].color = (t_color){204, 204, 255};
-	rt->shapes[4].rad = INFINITY;
-	rt->shapes[4].specular = 0;
-	rt->shapes[4].norm = (t_vec3){0., -1., 0.};
-	rt->shapes[4].type = e_plane;
-	//Плоскость
-	rt->shapes[5].center = (t_vec3){-9, 0, 0};
-	rt->shapes[5].color = (t_color){42, 82, 190};
-	rt->shapes[5].rad = INFINITY;
-	rt->shapes[5].specular = 0;
-	rt->shapes[5].norm = (t_vec3){1, 0, 0};
-	rt->shapes[5].type = e_plane;
-	//Плоскость
-	rt->shapes[6].center = (t_vec3){9, 0, 0};
-	rt->shapes[6].color = (t_color){202, 44, 146};
-	rt->shapes[6].rad = INFINITY;
-	rt->shapes[6].specular = 0;
-	rt->shapes[6].norm = (t_vec3){-1, 0, 0};
-	rt->shapes[6].type = e_plane;
+	rt->shapes[i].center = (t_vec3){0., 1., 29.};
+	rt->shapes[i].color = (t_color){49, 127, 67};
+	rt->shapes[i].rad = INFINITY;
+	rt->shapes[i].specular = 0;
+	rt->shapes[i].norm = (t_vec3){0., 0., -1.};
+	rt->shapes[i++].type = e_plane;
+
+	rt->shapes[i].center = (t_vec3){0., -5., 0.};
+	rt->shapes[i].color = (t_color){121, 85, 61};
+	rt->shapes[i].rad = INFINITY;
+	rt->shapes[i].specular = 0;
+	rt->shapes[i].norm = (t_vec3){0., 1., 0.};
+	rt->shapes[i++].type = e_plane;
+
+	rt->shapes[i].center = (t_vec3){0., 5., 0.};
+	rt->shapes[i].color = (t_color){204, 204, 255};
+	rt->shapes[i].rad = INFINITY;
+	rt->shapes[i].specular = 0;
+	rt->shapes[i].norm = (t_vec3){0., -1., 0.};
+	rt->shapes[i++].type = e_plane;
 	// Конус
-	// rt->shapes[7].center = (t_vec3){0., 0., 0.};
-	// rt->shapes[7].axis = normalize((t_vec3){0., 1., 0.});
-	// rt->shapes[7].color = (t_color){0, 100, 150};
-	// rt->shapes[7].k = tan(M_PI / 6 / 2);
-	// rt->shapes[7].pow_k = rt->shapes[7].k * rt->shapes[7].k;
-	// rt->shapes[7].specular = 0;
-	// rt->shapes[7].type = e_conus;
+	// rt->shapes[i].center = (t_vec3){0., 0., 0.};
+	// rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
+	// rt->shapes[i].color = (t_color){0, 100, 150};
+	// rt->shapes[i].k = tan(M_PI_2 / 6);
+	// rt->shapes[i].pow_k = rt->shapes[i].k * rt->shapes[i].k;
+	// rt->shapes[i].specular = 0;
+	// rt->shapes[i++].type = e_conus;
 	
 	//Свет
 	rt->max_light = 3;
 	rt->light = ft_memalloc(sizeof(t_light) * rt->max_light);
 	//Направленый свет
-	rt->light[0].dir = (t_vec3){0., 0., 0.};
-	rt->light[0].intens = 0.8;
+	rt->light[0].dir = (t_vec3){-20., 3., -20.};
+	rt->light[0].intens = 0.4;
 	rt->light[0].on = true;
 	rt->light[0].type = e_point;
 	rt->light[0].max_light = rt->max_light;
 	//Направленый свет
-	rt->light[2].dir = (t_vec3){0., 0.5, -0.5};
+	rt->light[2].dir = (t_vec3){20., 3, -20};
 	rt->light[2].intens = 0.5;
 	rt->light[2].on = true;
 	rt->light[2].type = e_point;
@@ -107,23 +163,31 @@ void	init_cam(t_rt *rt)
 	rt->light[1].intens = 0.2;
 	rt->light[1].on = true;
 	rt->light[1].max_light = rt->max_light;
-	
+	rt->rot[0] = 0. * M_PI_180;
+	rt->rot[1] = 0. * M_PI_180;
+	rt->rot[2] = 0. * M_PI_180;
 	rt->cam.opoint = (t_vec3){0., 0., -20.};
-	rt->x = 750;
-	// rt->cam.ray.y = 0;
-	
-
 }
 
-void	clear_cache_cam(t_vec3 **dir, int height)
+t_vec3	rotate_cam(t_vec3 dir, double angle[3])
 {
-	int	y;
+	double	x;
+	double	y;
 
-	y = -1;
-	while (++y < height)
-		free(dir[y]);
-	if (dir != NULL)
-		free(dir);
+	if (angle[0] != 0)
+		dir = (t_vec3){dir.x, dir.y * cos(angle[0]) + dir.z * sin(angle[0]),
+			-dir.y * sin(angle[0]) + dir.z * cos(angle[0])};
+	if (angle[1] != 0)
+		dir = (t_vec3){dir.x * cos(angle[1]) + dir.z * sin(angle[1]), dir.y,
+			-dir.x * sin(angle[1]) + dir.z * cos(angle[1])};
+	if (angle[2] != 0)
+	{
+		x = dir.x;
+		y = dir.y;
+		dir = (t_vec3){x * cos(angle[2]) - y * sin(angle[2]), x * sin(angle[2])
+			+ y * cos(angle[2]), dir.z};
+	}
+	return (dir);
 }
 
 void	cache_cam(t_rt *rt)
@@ -133,19 +197,21 @@ void	cache_cam(t_rt *rt)
 	t_vec3 ray;
 	
 	ray.z = rt->cam.opoint.z + 1;
-	if (rt->cam.dir != NULL)
-		clear_cache_cam(rt->cam.dir, rt->sdl.win_hight_old);
-	rt->cam.dir = (t_vec3 **)ft_memalloc(sizeof(t_vec3 *) * rt->sdl.win_hight);
 	y = 0;
-	while (y < rt->sdl.win_hight)
+	while (y < WIN_HEIGHT)
 	{
 		x = 0;
-		ray.y = (rt->sdl.win_hight * 0.5 - y) / rt->sdl.win_hight;
-		rt->cam.dir[y] = (t_vec3 *)ft_memalloc(sizeof(t_vec3) * rt->sdl.win_width);
-		while (x < rt->sdl.win_width)
+		ray.y = (WIN_HEIGHT * 0.5 - y) / WIN_HEIGHT;
+		while (x < WIN_WIDTH)
 		{
-			ray.x = (x - (rt->sdl.win_width * 0.5)) / rt->sdl.win_hight;
+			ray.x = (x - (WIN_WIDTH * 0.5)) / WIN_HEIGHT;
 			rt->cam.dir[y][x] = normalize(subtraction3(ray, rt->cam.opoint));
+			// t_vec3 i = normalize((t_vec3){0.99, 0., 0.16});
+			// t_vec3 j = (t_vec3){0, 1, 0};
+			// t_vec3 k = normalize((t_vec3){0.16, 0., -0.99});
+			// rt->cam.dir[y][x] = addition3(addition3(cross_scalar(i, rt->cam.dir[y][x].x),
+			// 	cross_scalar(j, rt->cam.dir[y][x].y)), cross_scalar(k, rt->cam.dir[y][x].z));
+			rt->cam.dir[y][x] = rotate_cam(rt->cam.dir[y][x], rt->rot);
 			x++;
 		}
 		y++;
@@ -165,8 +231,6 @@ int		main(void)
 		shading(rt);
 		event_list(rt);
 		SDL_RenderPresent(rt->sdl.screen);
-		SDL_SetRenderDrawColor(rt->sdl.screen, 0, 0, 0, 0);
-		SDL_RenderClear(rt->sdl.screen);
 	}	
 	rt_free(rt);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/28 14:33:31 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/30 17:49:50 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,36 @@ void		keyboard_events(t_rt *rt, SDL_Keycode sym)
 	else if (sym == SDLK_y)
 		rt->cam.opoint.z -= 0.4;
 
-	else if (sym == SDLK_UP)
-		rt->y += 0.5;
-	else if (sym == SDLK_DOWN)
-		rt->y -= 0.5;
-	else if (sym == SDLK_LEFT)
-		rt->x -= 1;
-	else if (sym == SDLK_RIGHT)
-		rt->x += 1;
+	else if (sym == SDLK_1)
+	{
+		rt->rot[0] += M_PI_180;
+		cache_cam(rt);
+	}
+	else if (sym == SDLK_2)
+	{
+		rt->rot[0] -= 5 * M_PI_180;
+		cache_cam(rt);
+	}
+	else if (sym == SDLK_3)
+	{
+		rt->rot[1] += 5 * M_PI_180;
+		cache_cam(rt);
+	}
+	else if (sym == SDLK_4)
+	{
+		rt->rot[1] -= 5 * M_PI_180;
+		cache_cam(rt);
+	}
+		else if (sym == SDLK_5)
+	{
+		rt->rot[2] += 5 * M_PI_180;
+		cache_cam(rt);
+	}
+	else if (sym == SDLK_6)
+	{
+		rt->rot[2] -= 5 * M_PI_180;
+		cache_cam(rt);
+	}
 }
 
 void		event_list(t_rt *rt)
@@ -109,13 +131,5 @@ void		event_list(t_rt *rt)
 			mouse_events(rt);
 		else if (rt->sdl.event.type == SDL_KEYDOWN)
 			keyboard_events(rt, rt->sdl.event.key.keysym.sym);
-	}
-	SDL_GetWindowSize(rt->sdl.window, &rt->sdl.win_width, &rt->sdl.win_hight);
-	if (rt->sdl.win_width != rt->sdl.win_width_old ||
-		rt->sdl.win_hight != rt->sdl.win_hight_old)
-	{
-		cache_cam(rt);
-		rt->sdl.win_width_old = rt->sdl.win_width;
-		rt->sdl.win_hight_old = rt->sdl.win_hight;
 	}
 }

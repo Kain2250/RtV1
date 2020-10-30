@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/29 20:29:32 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/10/30 18:34:13 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@
 # include <math.h>
 // # include <CL/cl.h>
 
-# define WIN_WIDTH 500
-# define WIN_HEIGHT 500
+# define WIN_WIDTH 50
+# define WIN_HEIGHT 50
+# define M_PI_180 M_PI / 180
 # define NAME_WIN "RTV by Bdrinkin & Ecelsa"
 
 
@@ -129,7 +130,7 @@ typedef struct		s_shape
 typedef struct		s_cam
 {
 	t_vec3			opoint;
-	struct s_vec3	**dir;
+	struct s_vec3	dir[WIN_HEIGHT][WIN_WIDTH];
 }					t_cam;
 
 typedef struct		s_cl
@@ -163,6 +164,7 @@ typedef struct		s_rt
 	int				max_light;
 	t_point			limit;
 	bool			quit;
+	double			rot[3];
 	int				x;
 	int				y;
 }					t_rt;
@@ -224,5 +226,6 @@ void				shading(t_rt *rt);
 
 double				ft_min_d(double v1, double v2);
 
+void				recache_cam(t_rt * rt);
 
 #endif

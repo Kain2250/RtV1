@@ -6,45 +6,11 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 14:40:33 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/04 19:25:46 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-
-void				clear_surface(SDL_Surface *surface, Uint32 color)
-{
-	SDL_LockSurface(surface);
-	SDL_memset(surface->pixels, color, surface->h * surface->pitch);//ВАЖНО
-	SDL_UnlockSurface(surface);
-}
-
-void		color_fill(t_color *dst, t_color src)
-{
-	dst->red = src.red;
-	dst->green = src.green;
-	dst->blue = src.blue;
-}
-
-t_color		mix_color(t_color color, double intensity)
-{
-	t_color	mix;
-
-	mix.red = clamp(color.red * intensity, 0, 255);
-	mix.green = clamp(color.green * intensity, 0, 255);
-	mix.blue = clamp(color.blue * intensity, 0, 255);
-	return (mix);
-}
-
-double		light(t_vec3 intersect, t_vec3 l_point,
-				t_vec3 norm, double intensity)
-{
-	t_vec3	lvec;
-
-	lvec = normalize(subtraction3(l_point, intersect));
-	return (intensity * clamp(dot3(lvec, norm), 0, 1));
-}
 
 double		disk_of_shapes(t_vec3 dir, t_vec3 opoint, t_shape shape)
 {
@@ -63,30 +29,41 @@ double		disk_of_shapes(t_vec3 dir, t_vec3 opoint, t_shape shape)
 	return (point);
 }
 
+double			equal_min(double min[2], int i, t_intersect *param)
+{
+	if (min[1] < min[0])
+	{
+		param->iter = i;
+		return (min[1]);
+	}
+	return (min[0]);
+}
+
 t_intersect		ray_intersect(t_vec3 dir, t_vec3 opoint,
 					t_shape *shape, int count_shape)
 {
 	int			i;
-	double		min;
-	double		curr;
+	double		min[2];
 	t_intersect	param;
 
 	i = -1;
-	min = INFINITY;
+	min[0] = INFINITY;
 	param.point = INFINITY;
+	param.iter = 0;
 	while (++i < count_shape)
 	{
-		curr = disk_of_shapes(dir, opoint, shape[i]);
-		if (curr < min)
-		{
-			param.iter = i;
-			min = curr;
-		}
+		min[1] = disk_of_shapes(dir, opoint, shape[i]);
+		min[0] = equal_min(min, i, &param);
+		// if (min[1] < min[0])
+		// {
+		// 	param.iter = i;
+		// 	min[0] = min[1];
+		// }
 	}
-	if (min != INFINITY)
+	if (min[0] != INFINITY)
 	{
-		param.intersect = addition3(opoint, cross_scalar(dir, min));
-		param.point = min;
+		param.intersect = addition3(opoint, cross_scalar(dir, min[0]));
+		param.point = min[0];
 		param.shine = shape[param.iter].specular;
 		color_fill(&param.color, shape[param.iter].color);
 	}
@@ -102,27 +79,6 @@ t_vec3		plane_limiter(t_vec3 intersect, t_shape shape)
 	return (intersect);
 }
 
-t_vec3		surface_norm(t_intersect param, t_shape shape,
-				t_vec3 opoint, t_vec3 dir)
-{
-	t_vec3	norm;
-	double	m;
-
-	norm = shape.norm;
-	if (shape.type == e_cilindr || shape.type == e_conus)
-		m = dot3(dir, shape.axis) * param.point +
-		dot3(subtraction3(opoint, shape.center), shape.axis);
-	if (shape.type == e_sphere)
-		norm = normalize(subtraction3(param.intersect, shape.center));
-	else if (shape.type == e_cilindr)
-		norm = normalize(subtraction3(subtraction3(param.intersect,
-			shape.center), cross_scalar(shape.axis, m)));
-	else if (shape.type == e_conus)
-		norm = normalize(subtraction3(subtraction3(param.intersect,
-			shape.center), cross_scalar(shape.axis, m * (1 + shape.pow_k))));
-	return (norm);
-}
-
 t_color		lighting_calculation(t_intersect param, t_light *light,
 				t_vec3 norm, t_vec3 dir, t_rt *rt)
 {
@@ -134,9 +90,9 @@ t_color		lighting_calculation(t_intersect param, t_light *light,
 	t_vec3	a;
 	t_vec3	r;
 	int		i_temp;
-	t_vec3 n_p;
-	t_intersect itr;
-	
+	t_vec3	n_p;
+	t_intersect	itr;
+
 	i_temp = -1;
 	if (param.color.red == 0 && param.color.green == 0 && param.color.blue == 0)
 		return ((t_color){0, 0, 0});
@@ -177,7 +133,6 @@ t_color		lighting_calculation(t_intersect param, t_light *light,
 		}
 	}
 	return (color);
-
 }
 
 t_color		pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt)
@@ -191,32 +146,3 @@ t_color		pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt)
 	color = lighting_calculation(param, rt->light, norm, dir, rt);
 	return (color);
 }
-
-
-// void		coleidoscope(t_rt *rt, t_point pixel, t_vec3 a)
-// {
-// 	t_vec3	dir;
-// 	double	t0;
-// 	(void)a;
-// 
-// 	double	radius = 20.f;
-// 	t_vec3	center = (t_vec3){.x = 0.f, .y = 0.f, .z = 20.f};
-// 	t_vec3	cam = (t_vec3){.x = 0, .y = 0, .z = 0};
-// 	t_vec3 lp = (t_vec3){.x = 0, .y = 0, .z = 0};;
-// 
-// 	dir = normalize(subtraction3(a, cam));
-// 	t0 = sphere_intersect(radius, center, cam, dir);
-// 	if (t0 >= 0)
-// 	{
-// 
-// 		t_vec3 temp1 = (t_vec3){.x = dir.x * t0, .y = dir.y * t0, .z = dir.z * t0};
-// 		t_vec3 inter = addition3(cam, temp1);
-// 		t_vec3 norm = normalize(subtraction3(inter, center));
-// 		double li = light(inter, lp, norm, 0.08);
-// 		t_color color = (t_color){.red = 200 * li, .green = 100 * li, .blue = 50 * li};
-// 		SDL_SetRenderDrawColor(rt->sdl.screen, color.red, color.green, color.blue, 0);
-// 		SDL_RenderDrawPoint(rt->sdl.screen, pixel.x, pixel.y);
-// 
-// 		// putpixel(rt->sdl.screen, pixel.x, pixel.y, color8_to_32(color));
-// 	}
-// }

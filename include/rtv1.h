@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 20:17:30 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/04 19:31:17 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,5 +209,9 @@ void				shading(t_rt *rt);
 double				ft_min_d(double v1, double v2);
 void				recache_cam(t_rt *rt);
 void				rt_free(t_rt *rt);
+void				color_fill(t_color *dst, t_color src);
+t_color				mix_color(t_color color, double intensity);
+t_vec3				surface_norm(t_intersect param, t_shape shape,
+						t_vec3 opoint, t_vec3 dir);
 
 #endif

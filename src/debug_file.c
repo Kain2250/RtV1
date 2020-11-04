@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 08:33:00 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 20:15:47 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/04 16:43:25 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	rt_free(t_rt *rt)
 	free(rt);
 }
 
-double		ft_min_d(double v1, double v2)
+double	ft_min_d(double v1, double v2)
 {
 	return ((v1 < v2) ? v1 : v2);
 }

@@ -8,7 +8,7 @@
 		{
 			rt->cam.dir[y] = (t_vec3 *)ft_memalloc(sizeof(t_vec3) * rt->sdl.win_width);
 			ray.x = (x - (rt->sdl.win_width * 0.5)) / rt->sdl.win_hight;
-			rt->cam.dir[y][x] = normalize(subtraction3(ray, rt->cam.opoint));
+			rt->cam.dir[y][x] = parallel_transfer3(ray, rt->cam.opoint));
 			x++;
 		}
 		y++;

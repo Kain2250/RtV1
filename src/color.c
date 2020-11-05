@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 18:08:49 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/04 18:09:16 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/05 18:03:04 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ double		light(t_vec3 intersect, t_vec3 l_point,
 {
 	t_vec3	lvec;
 
-	lvec = normalize(subtraction3(l_point, intersect));
+	lvec = parallel_transfer3(l_point, intersect);
 	return (intensity * clamp(dot3(lvec, norm), 0, 1));
 }

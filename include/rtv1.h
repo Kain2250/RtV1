@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/04 19:31:17 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/05 18:01:10 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,24 @@ typedef struct		s_rt
 	int				y;
 }					t_rt;
 
+typedef struct		s_4vec3
+{
+	t_vec3			a;
+	t_vec3			r;
+	t_vec3			b;
+	t_vec3			c;
+}					t_4vec3;
+
+typedef struct		s_shine
+{
+	t_vec3			lvec;
+	t_vec3			norm;
+	t_color			color;
+	t_light			light;
+	t_vec3			dir;
+	double			shine;
+}					t_shine;
+
 typedef struct		s_intersect
 {
 	t_vec3			intersect;
@@ -195,6 +213,7 @@ double				plane_intersect(t_vec3 opoint, t_vec3 dir,
 						t_vec3 center, t_vec3 norm);
 double				cylinder_intersect(t_shape shape, t_vec3 cam,
 						t_vec3 direction);
+t_vec3				parallel_transfer3(t_vec3 a, t_vec3 b);
 
 double				find_intensity(t_vec3 intersect, t_light *is_light,
 						t_vec3 norm, int max_light);

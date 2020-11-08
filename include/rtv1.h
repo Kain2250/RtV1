@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/08 17:38:00 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/08 20:51:55 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # endif
 # include "libft.h"
 # include "errorout.h"
+# include "colors.h"
 # include <stdbool.h>
 # include <math.h>
 
@@ -126,7 +127,7 @@ typedef struct		s_con_ax
 	t_vec3			axis;
 }					t_con_ax;
 
-typedef struct		s_col_ax
+typedef struct		s_cil_ax
 {
 	double			rad;
 	t_vec3			axis;
@@ -252,5 +253,13 @@ t_vec3				surface_norm(t_intersect param, t_shape shape,
 						t_vec3 opoint, t_vec3 dir);
 t_color				lighting_calculation(t_intersect param, t_light *light,
 						t_d_norm dn, t_rt *rt);
+
+void				init_cam(t_rt *rt);
+double				equal_min(double min[2], int i, t_intersect *param);
+bool				shadow_calc(t_light light, t_intersect itr,
+						t_vec3 n_p, t_color *color);
+t_intersect			ray_intersect(t_vec3 dir, t_vec3 opoint,
+						t_shape *shape, int count_shape);
+t_color				shine_calc(t_shine s);
 
 #endif

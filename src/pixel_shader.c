@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/08 17:04:28 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/08 20:41:55 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_intersect		ray_intersect(t_vec3 dir, t_vec3 opoint,
 		color_fill(&param.color, shape[param.iter].color);
 	}
 	else
-		param.color = (t_color){0, 0, 0};
+		param.color = BLACK_COLOR;
 	return (param);
 }
 
@@ -101,7 +101,7 @@ t_color			pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt)
 
 	param = ray_intersect(dir, opoint, rt->shapes, rt->max_shape);
 	if (param.color.red == 0 && param.color.green == 0 && param.color.blue == 0)
-		return ((t_color){0, 0, 0});
+		return (BLACK_COLOR);
 	norm = surface_norm(param, rt->shapes[param.iter], opoint, dir);
 	color = lighting_calculation(param, rt->light, (t_d_norm){dir, norm}, rt);
 	return (color);

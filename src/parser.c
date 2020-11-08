@@ -210,9 +210,7 @@ void 		parse_block(int fd, int block, char **line, t_rt *rt)
 			else if (ft_strequ(*line,"color"))
 			{
 				arr_sub = ft_strsplit(arr[1], ',');
-				sub.color[0] = atoi(arr_sub[0]);
-				sub.color[1] = atoi(arr_sub[1]);
-				sub.color[2] = atoi(arr_sub[2]);
+				sub.color = (t_color){.red = arr_sub[0], .green = arr_sub[1], .blue = arr_sub[2]};
 				ft_free_split(arr_sub);
 			}
 			else if (ft_strequ(*line,"rad"))

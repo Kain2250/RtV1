@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 20:24:57 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/05 18:33:59 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/08 17:04:28 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,6 @@ double			disk_of_shapes(t_vec3 dir, t_vec3 opoint, t_shape shape)
 	if (point <= 0)
 		point = INFINITY;
 	return (point);
-}
-
-double			equal_min(double min[2], int i, t_intersect *param)
-{
-	if (min[1] < min[0])
-	{
-		param->iter = i;
-		return (min[1]);
-	}
-	return (min[0]);
 }
 
 t_intersect		ray_intersect(t_vec3 dir, t_vec3 opoint,
@@ -65,13 +55,6 @@ t_intersect		ray_intersect(t_vec3 dir, t_vec3 opoint,
 	else
 		param.color = (t_color){0, 0, 0};
 	return (param);
-}
-
-t_vec3			plane_limiter(t_vec3 intersect, t_shape shape)
-{
-	if (!(mod3(subtraction3(intersect, shape.center)) <= shape.rad))
-		return ((t_vec3){INFINITY, INFINITY, INFINITY});
-	return (intersect);
 }
 
 t_color			shine_calc(t_shine s)
@@ -110,35 +93,6 @@ bool			shadow_calc(t_light light, t_intersect itr,
 	return (false);
 }
 
-t_color			lighting_calculation(t_intersect param, t_light *light,
-					t_vec3 norm, t_vec3 dir, t_rt *rt)
-{
-	t_color		color;
-	int			i;
-	t_vec3		lvec;
-	t_vec3		n_p;
-
-	i = -1;
-	color = mix_color(param.color, find_intensity(param.intersect, light,
-		norm, light->max_light));
-	while (++i < light->max_light)
-	{
-		if (light[i].type == e_point && light[i].on == true)
-		{
-			lvec = parallel_transfer3(light[i].dir, param.intersect);
-			if (dot3(lvec, norm) < 0.)
-				continue ;
-			n_p = addition3(param.intersect, cross_scalar(norm, 1e-4));
-			if (shadow_calc(light[i], ray_intersect(lvec, n_p, rt->shapes,
-				rt->max_shape), n_p, &color))
-				continue ;
-			color = (param.shine != 0.) ? shine_calc((t_shine){lvec, norm,
-				color, light[i], dir, param.shine}) : color;
-		}
-	}
-	return (color);
-}
-
 t_color			pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt)
 {
 	t_intersect	param;
@@ -149,6 +103,6 @@ t_color			pixel_shader(t_vec3 dir, t_vec3 opoint, t_rt *rt)
 	if (param.color.red == 0 && param.color.green == 0 && param.color.blue == 0)
 		return ((t_color){0, 0, 0});
 	norm = surface_norm(param, rt->shapes[param.iter], opoint, dir);
-	color = lighting_calculation(param, rt->light, norm, dir, rt);
+	color = lighting_calculation(param, rt->light, (t_d_norm){dir, norm}, rt);
 	return (color);
 }

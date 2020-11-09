@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kain2250 <kain2250@student.42.fr>          +#+  +:+       +#+         #
+#    By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/21 19:14:26 by kain2250          #+#    #+#              #
-#    Updated: 2020/10/22 21:14:17 by kain2250         ###   ########.fr        #
+#    Updated: 2020/11/02 20:20:28 by bdrinkin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,29 +15,29 @@ NAME = rtv1
 
 # Флаги компиляции:
 GCC = gcc
-CCFLAGS = -Wall -Wextra -Werror
-OTHERS_FLAGS = -lm -lft -lSDL2 -lSDL2_image -lSDL2_ttf -lGL
+CCFLAGS = -Wall -Wextra -Werror -O2
+OTHERS_FLAGS = -lm -lft #-lSDL2 -lSDL2_image -lSDL2_ttf
 # Список фреймворков и их пути:
 FRAME_SDL2_DIR = Frameworks
 FRAME_SDL2 = $(FRAME_SDL2_DIR)/SDL2.framework
 FRAME_SDL2_IMAGE = $(FRAME_SDL2_DIR)/SDL2_image.framework
 FRAME_SDL2_TTF = $(FRAME_SDL2_DIR)/SDL2_ttf.framework
 
-ifeq ($(shell uname), Linux)
-	FRAMEWORKS = -L /usr/bin/
-	INCLUDES_SDL2 = -I /usr/local/include/
-else
-	FRAMEWORKS = -F Frameworks \
-		-framework SDL2 \
-		-framework SDL2_image \
-		-framework SDL2_ttf \
-		-rpath $(FRAME_SDL2_DIR)
+# ifeq ($(shell uname), Linux)
+# 	FRAMEWORKS = -L /usr/bin/
+# 	INCLUDES_SDL2 = -I /usr/local/include/
+# else
+FRAMEWORKS = -F Frameworks \
+	-framework SDL2 \
+	-framework SDL2_image \
+	-framework SDL2_ttf \
+	-rpath $(FRAME_SDL2_DIR)
 
-	INCLUDES_SDL2 = -F $(FRAME_SDL2_DIR) \
-	-I $(FRAME_SDL2)/Headers \
-	-I $(FRAME_SDL2_IMAGE)/Headers \
-	-I $(FRAME_SDL2_TTF)/Headers
-endif
+INCLUDES_SDL2 = -F $(FRAME_SDL2_DIR) \
+-I $(FRAME_SDL2)/Headers \
+-I $(FRAME_SDL2_IMAGE)/Headers \
+-I $(FRAME_SDL2_TTF)/Headers
+# endif
 
 # Список библиотек и их пути:
 LIBFT_DIRECTORY = libft
@@ -61,7 +61,6 @@ HEADERS = $(addprefix $(INCLUDES_DIRECTORY), $(HEADERS_LIST))
 # Основные файлы программы и их пути:
 SRC_DIRECTORY = src/
 SRC_LIST = *.c \
-
 
 SRC = $(addprefix $(SRC_DIRECTORY), $(SRC_LIST))
 

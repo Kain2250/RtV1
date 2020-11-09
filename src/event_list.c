@@ -6,13 +6,13 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 02:06:02 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 20:09:03 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/04 17:54:59 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-int				which_button(bool *mouse)
+int		which_button(bool *mouse)
 {
 	*mouse = true;
 	if (SDL_BUTTON(SDL_BUTTON_RIGHT) & SDL_GetMouseState(NULL, NULL))
@@ -29,7 +29,7 @@ int				which_button(bool *mouse)
 	return (0);
 }
 
-bool			event_exit(t_rt *rt)
+bool	event_exit(t_rt *rt)
 {
 	if (rt->sdl.event.type == SDL_QUIT ||
 		(rt->sdl.event.key.keysym.sym == SDLK_ESCAPE &&
@@ -39,8 +39,7 @@ bool			event_exit(t_rt *rt)
 		return (false);
 }
 
-
-void		event_list(t_rt *rt)
+void	event_list(t_rt *rt)
 {
 	while (SDL_PollEvent(&rt->sdl.event) != 0)
 	{

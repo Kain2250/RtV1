@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/08 17:07:40 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/09 16:26:16 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,23 @@ double		equal_min(double min[2], int i, t_intersect *param)
 	return (min[0]);
 }
 
-t_vec3		rotate_cam(t_vec3 dir, double angle[3])
+t_vec3		rotate_cam(t_vec3 dir, t_vec3 angle)
 {
 	double	x;
 	double	y;
 
-	if (angle[0] != 0)
-		dir = (t_vec3){dir.x, dir.y * cos(angle[0]) + dir.z * sin(angle[0]),
-			-dir.y * sin(angle[0]) + dir.z * cos(angle[0])};
-	if (angle[1] != 0)
-		dir = (t_vec3){dir.x * cos(angle[1]) + dir.z * sin(angle[1]), dir.y,
-			-dir.x * sin(angle[1]) + dir.z * cos(angle[1])};
-	if (angle[2] != 0)
+	if (angle.x != 0)
+		dir = (t_vec3){dir.x, dir.y * cos(angle.x) + dir.z * sin(angle.x),
+			-dir.y * sin(angle.x) + dir.z * cos(angle.x)};
+	if (angle.y != 0)
+		dir = (t_vec3){dir.x * cos(angle.y) + dir.z * sin(angle.y), dir.y,
+			-dir.x * sin(angle.y) + dir.z * cos(angle.y)};
+	if (angle.z != 0)
 	{
 		x = dir.x;
 		y = dir.y;
-		dir = (t_vec3){x * cos(angle[2]) - y * sin(angle[2]), x * sin(angle[2])
-			+ y * cos(angle[2]), dir.z};
+		dir = (t_vec3){x * cos(angle.z) - y * sin(angle.z), x * sin(angle.z)
+			+ y * cos(angle.z), dir.z};
 	}
 	return (dir);
 }

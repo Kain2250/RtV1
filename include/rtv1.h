@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/08 20:51:55 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/09 16:35:29 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ typedef struct		s_rt
 	int				max_light;
 	t_point			limit;
 	bool			quit;
-	double			rot[3];
+	t_vec3			rot;
 	int				x;
 	int				y;
 }					t_rt;
@@ -188,6 +188,23 @@ typedef struct		s_shine
 	t_vec3			dir;
 	double			shine;
 }					t_shine;
+
+typedef struct		s_sub_parser
+{
+	t_vec3		opoint;
+	t_vec3		dir;
+	t_vec3		center;
+	t_vec3		axis;
+	t_vec3		norm;
+	t_color		color;
+	t_vec3		rot;
+	double		rad;
+	double		angle;
+	double		specular;
+	int			type;
+	double		intens;
+	bool		on;
+}					t_sub_parser;
 
 typedef struct		s_intersect
 {

@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 20:17:30 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/08 20:51:55 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # endif
 # include "libft.h"
 # include "errorout.h"
+# include "colors.h"
 # include <stdbool.h>
 # include <math.h>
 
@@ -120,6 +121,18 @@ typedef struct		s_shape
 	double			pow_k;
 }					t_shape;
 
+typedef struct		s_con_ax
+{
+	double			angle;
+	t_vec3			axis;
+}					t_con_ax;
+
+typedef struct		s_cil_ax
+{
+	double			rad;
+	t_vec3			axis;
+}					t_cil_ax;
+
 typedef struct		s_cam
 {
 	t_vec3			opoint;
@@ -151,6 +164,30 @@ typedef struct		s_rt
 	int				x;
 	int				y;
 }					t_rt;
+
+typedef struct		s_4vec3
+{
+	t_vec3			a;
+	t_vec3			r;
+	t_vec3			b;
+	t_vec3			c;
+}					t_4vec3;
+
+typedef struct		s_d_norm
+{
+	t_vec3			dir;
+	t_vec3			norm;
+}					t_d_norm;
+
+typedef struct		s_shine
+{
+	t_vec3			lvec;
+	t_vec3			norm;
+	t_color			color;
+	t_light			light;
+	t_vec3			dir;
+	double			shine;
+}					t_shine;
 
 typedef struct		s_intersect
 {
@@ -195,6 +232,7 @@ double				plane_intersect(t_vec3 opoint, t_vec3 dir,
 						t_vec3 center, t_vec3 norm);
 double				cylinder_intersect(t_shape shape, t_vec3 cam,
 						t_vec3 direction);
+t_vec3				parallel_transfer3(t_vec3 a, t_vec3 b);
 
 double				find_intensity(t_vec3 intersect, t_light *is_light,
 						t_vec3 norm, int max_light);
@@ -209,5 +247,19 @@ void				shading(t_rt *rt);
 double				ft_min_d(double v1, double v2);
 void				recache_cam(t_rt *rt);
 void				rt_free(t_rt *rt);
+void				color_fill(t_color *dst, t_color src);
+t_color				mix_color(t_color color, double intensity);
+t_vec3				surface_norm(t_intersect param, t_shape shape,
+						t_vec3 opoint, t_vec3 dir);
+t_color				lighting_calculation(t_intersect param, t_light *light,
+						t_d_norm dn, t_rt *rt);
+
+void				init_cam(t_rt *rt);
+double				equal_min(double min[2], int i, t_intersect *param);
+bool				shadow_calc(t_light light, t_intersect itr,
+						t_vec3 n_p, t_color *color);
+t_intersect			ray_intersect(t_vec3 dir, t_vec3 opoint,
+						t_shape *shape, int count_shape);
+t_color				shine_calc(t_shine s);
 
 #endif

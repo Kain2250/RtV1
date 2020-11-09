@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 22:23:21 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/10/30 20:03:11 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/04 17:55:30 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,3 @@ double		plane_intersect(t_vec3 opoint, t_vec3 dir,
 		point = INFINITY;
 	return (point);
 }
-

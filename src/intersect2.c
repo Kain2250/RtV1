@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse_event.c                                      :+:      :+:    :+:   */
+/*   intersect2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 02:14:39 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/02 20:54:19 by bdrinkin         ###   ########.fr       */
+/*   Created: 2020/11/08 17:05:30 by bdrinkin          #+#    #+#             */
+/*   Updated: 2020/11/08 17:06:28 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void		mouse_events(t_rt *rt)
+t_vec3			plane_limiter(t_vec3 intersect, t_shape shape)
 {
-	if (rt->sdl.event.wheel.type == SDL_MOUSEWHEEL &&
-				rt->sdl.event.wheel.y > 0)
-		rt->cam.opoint.z += rt->sdl.event.wheel.y * 0.1;
-	else if (rt->sdl.event.wheel.type == SDL_MOUSEWHEEL &&
-				rt->sdl.event.wheel.y < 0)
-		rt->cam.opoint.z += rt->sdl.event.wheel.y * 0.1;
+	if (!(mod3(subtraction3(intersect, shape.center)) <= shape.rad))
+		return ((t_vec3){INFINITY, INFINITY, INFINITY});
+	return (intersect);
 }

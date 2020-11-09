@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+         #
+#    By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/21 19:14:26 by kain2250          #+#    #+#              #
-#    Updated: 2020/11/02 20:20:28 by bdrinkin         ###   ########.fr        #
+#    Updated: 2020/11/10 00:14:34 by ecelsa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@
 NAME = rtv1
 
 # Флаги компиляции:
-GCC = gcc
-CCFLAGS = -Wall -Wextra -Werror -O2
+GCC = gcc -g
+CCFLAGS = -Wall -Wextra -Werror -O0
 OTHERS_FLAGS = -lm -lft #-lSDL2 -lSDL2_image -lSDL2_ttf
 # Список фреймворков и их пути:
 FRAME_SDL2_DIR = Frameworks

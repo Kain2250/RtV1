@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 00:44:23 by bdrinkin          #+#    #+#             */
-/*   Updated: 2019/11/04 23:08:48 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 01:39:09 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	ft_strdel(char **as)
 {
-	if (as != NULL)
+	if (*as != NULL)
 	{
-		ft_memdel((void **)as);
-		as = NULL;
+		free(*as);
+		*as = NULL;
 	}
 }

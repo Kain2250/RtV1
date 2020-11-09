@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 22:39:19 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/08/09 17:16:54 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 01:22:54 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ void	ft_free_split(char **split)
 			i++;
 		}
 		free(split);
+		split = NULL;
 	}
 }

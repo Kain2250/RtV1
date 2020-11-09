@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/09 16:26:16 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 00:23:51 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,25 @@ void		cache_cam(t_rt *rt)
 	}
 }
 
-int			main(void)
+int			main(int argc, char **argv)
 {
 	t_rt	*rt;
 
-	rt = ft_memalloc(sizeof(t_rt));
-	init_lib_sdl(rt);
-	init_cam(rt);
-	cache_cam(rt);
-	while (rt->quit != true)
+	(void)argv;
+	if (argc == 2)
 	{
-		shading(rt);
-		event_list(rt);
-		SDL_RenderPresent(rt->sdl.screen);
+		rt = ft_memalloc(sizeof(t_rt));
+		init_lib_sdl(rt);
+		// init_cam(rt);
+		parse_fail(argv[1], rt);
+		cache_cam(rt);
+		while (rt->quit != true)
+		{
+			shading(rt);
+			event_list(rt);
+			SDL_RenderPresent(rt->sdl.screen);
+		}
+		rt_free(rt);
 	}
-	rt_free(rt);
 	return (0);
 }

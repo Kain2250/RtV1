@@ -1,293 +1,227 @@
-// gcc ./src/parser.c -I./libft/includes -L./libft -lft -g -Wall -Wextra -Werror
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/10 02:00:31 by ecelsa            #+#    #+#             */
+/*   Updated: 2020/11/10 02:35:40 by ecelsa           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "libft.h"
-# include <math.h>
-# include <unistd.h>
-# define  bool	_Bool
+#include "rtv1.h"
 
-
-#define GET_SECTIONS 1
-#define GET_PAPARAM 2
-
-#define	SPHERE 1
-#define	CYLINDER 2
-#define	CONE 3
-#define	PLANE 4
-#define	LIGHT 5
-#define	CAM 6
-
-#define	SPHERE_T "[sphere]"
-#define	CYLINDER_T "[cylinder]"
-#define	CONE_T "[cone]"
-#define	PLANE_T "[plane]"
-#define	LIGHT_T "[light]"
-#define	CAM_T "[cam]"
-
-# define WIN_WIDTH 600
-# define WIN_HEIGHT 600
-
-typedef struct		s_color
-{
-	uint8_t			red;
-	uint8_t			green;
-	uint8_t			blue;
-}					t_color;
-
-typedef struct		s_vec3
-{
-	double			x;
-	double			y;
-	double			z;
-}					t_vec3;
-
-typedef struct		s_light
-{
-	int				fil;
-	t_vec3			dir;
-	double			intens;
-	uint8_t			type;
-	t_color			color;
-	int				max_light;
-	bool			on;
-}					t_light;
-
-typedef struct		s_shape
-{
-	int				fil;
-	uint8_t			type;
-	t_vec3			center;
-	double			specular;
-	t_vec3			norm;
-	t_vec3			axis;
-	double			rad;
-	t_color			color;
-	double			k;
-	double			pow_k;
-}					t_shape;
-
-typedef struct		s_cam
-{
-	t_vec3			opoint;
-	struct s_vec3	dir[WIN_HEIGHT][WIN_WIDTH];
-}					t_cam;
-
-typedef struct		s_rt
-{
-	// t_sdl			sdl;
-	t_shape			*shapes;
-	// t_mouse			mouse;
-	t_light			*light;
-	t_cam			cam;
-	int				max_shape;
-	int				max_light;
-	// t_point			limit;
-	bool			quit;
-	double			rot[3];
-	int				x;
-	int				y;
-}					t_rt;
-
-typedef struct		s_sub_parser
-{
-	t_vec3		opoint;
-	t_vec3		dir;
-	t_vec3		center;
-	t_vec3		axis;
-	t_color		color;
-	t_vec3		rot;
-	t_vec3		norm;
-	double		rad;
-	double		angle;
-	double		specular;
-	int			type;
-	double		intens;
-	bool		on;
-}					t_sub_parser;
-
-
-int	blocks_count(char *file_name, int *shapes, int *lights)
+int			blocks_count(char *file_name, int *shapes, int *lights)
 {
 	char		*line;
 	char		*sub_line;
 	int			fd;
 
-	*shapes = 0;
-	*lights = 0;
-	fd = open(file_name, O_RDONLY);
-	while ((get_next_line(fd, &line)))
+	if ((fd = open(file_name, O_RDONLY)))
 	{
-		sub_line = ft_strtrim(line);
-		free(line);
-		if ((ft_strncmp(sub_line, SPHERE_T,ft_strlen(SPHERE_T)) == 0) ||
-				(ft_strncmp(sub_line,CYLINDER_T,ft_strlen(CYLINDER_T)) == 0)
-			|| (ft_strncmp(sub_line,CONE_T,ft_strlen(CONE_T)) == 0) || (ft_strncmp(sub_line,PLANE_T,ft_strlen(PLANE_T))) == 0)
-			(*shapes)++;
-		if ((ft_strncmp(sub_line,LIGHT_T,ft_strlen(LIGHT_T))) == 0)
-			(*lights)++;
-		free(sub_line);
-	}	
-	close(fd);
+		while ((get_next_line(fd, &line)))
+		{
+			sub_line = ft_strtrim(line);
+			ft_strdel(&line);
+			if ((ft_strncmp(sub_line, SPHERE_T, ft_strlen(SPHERE_T)) == 0) ||
+				(ft_strncmp(sub_line, CYLINDER_T, ft_strlen(CYLINDER_T)) == 0)
+				|| (ft_strncmp(sub_line, CONE_T, ft_strlen(CONE_T)) == 0) ||
+					(ft_strncmp(sub_line, PLANE_T, ft_strlen(PLANE_T))) == 0)
+				(*shapes)++;
+			if ((ft_strncmp(sub_line, LIGHT_T, ft_strlen(LIGHT_T))) == 0)
+				(*lights)++;
+			ft_strdel(&sub_line);
+		}
+		ft_strdel(&sub_line);
+		ft_strdel(&line);
+		close(fd);
+	}
 	return (1);
 }
 
-int ft_arrlen(void **arr)
+int			ft_arrlen(void **arr)
 {
 	int i;
 
 	i = 0;
 	while (arr[i] != NULL)
 		i++;
-	return(i);
+	return (i);
 }
 
-t_light		create_light_point(sub);
-t_shape		create_cilinder();
-
-void fill_block(int block, t_rt *rt, t_sub_parser sub)
+int			iter_block(int block, t_rt *rt)
 {
 	int		i;
 
+	i = 0;
+	if (block == LIGHT)
+		while (i < rt->max_light && rt->light[i].fil != 0)
+			i++;
+	else if (block && block < 5)
+		while (i < rt->max_shape && rt->shapes[i].fil != 0)
+			i++;
+	return (i);
+}
+
+void		fill_block(int block, t_rt *rt, t_sub_parser sub)
+{
+	int		i;
+
+	i = iter_block(block, rt);
 	if (block == CAM)
 		create_cam(rt, sub);
-	if (block == LIGHT)
+	else if (block == LIGHT)
 	{
-		i = -1;
-		while (++i < rt->max_light && rt->light[i].fil != 1);
-		rt->light[i] = create_light_point(sub);
+		if (sub.type == 1)
+			rt->light[i] = create_light_ambient(sub, rt->max_light);
+		else
+			rt->light[i] = create_light_point(sub, rt->max_light);
 	}
-	if (block && block < 5)
+	else if (block && block < 5)
 	{
-		i = -1;
-		while (++i < rt->max_shape && rt->shapes[i].fil != 1);
 		if (block == CYLINDER)
 			rt->shapes[i] = create_cilinder(sub);
+		else if (block == SPHERE)
+			rt->shapes[i] = create_sphere(sub);
+		else if (block == CONE)
+			rt->shapes[i] = create_cone(sub);
+		else if (block == PLANE)
+			rt->shapes[i] = create_plane(sub);
 	}
 }
 
-void 		parse_block(int fd, int block, char **line, t_rt *rt)
+t_vec3		charsplit_to_tvec(char *str, char split)
 {
-	char 		*sub_line;
-	char		**arr;
-	char		**arr_sub;
-	t_shape		shape;
+	char	**arr;
+	t_vec3	sub;
+
+	ft_bzero(&sub, sizeof(t_vec3));
+	arr = ft_strsplit(str, split);
+	if (ft_arrlen((void **)arr) == 3)
+		sub = (t_vec3){.x = atof(arr[0]), .y = atof(arr[1]), .z = atof(arr[2])};
+	ft_free_split(arr);
+	return (sub);
+}
+
+t_color		charsplit_to_tcolor(char *str, char split)
+{
+	char	**arr;
+	t_color	sub;
+
+	ft_bzero(&sub, sizeof(t_color));
+	arr = ft_strsplit(str, split);
+	if (ft_arrlen((void **)arr) == 3)
+		sub = (t_color){.red = atof(arr[0]), .green = atof(arr[1]),
+														.blue = atof(arr[2])};
+	ft_free_split(arr);
+	return (sub);
+}
+
+void		fill_parse_var(t_sub_parser *sub, char *line, char *param)
+{
+	if (ft_strequ(line, "opoint"))
+		sub->opoint = charsplit_to_tvec(param, ',');
+	else if (ft_strequ(line, "rot"))
+		sub->rot = charsplit_to_tvec(param, ',');
+	else if (ft_strequ(line, "center"))
+		sub->center = charsplit_to_tvec(param, ',');
+	else if (ft_strequ(line, "axis"))
+		sub->axis = charsplit_to_tvec(param, ',');
+	else if (ft_strequ(line, "norm"))
+		sub->norm = charsplit_to_tvec(param, ',');
+	else if (ft_strequ(line, "color"))
+		sub->color = charsplit_to_tcolor(param, ',');
+	else if (ft_strequ(line, "rad"))
+		sub->rad = atof(param);
+	else if (ft_strequ(line, "specular"))
+		sub->specular = atof(param);
+	else if (ft_strequ(line, "type"))
+		sub->type = atof(param);
+	else if (ft_strequ(line, "intens"))
+		sub->intens = atof(param);
+	else if (ft_strequ(line, "on"))
+		sub->on = atoi(param);
+	else if (ft_strequ(line, "angle"))
+		sub->angle = atof(param);
+}
+
+void		parse_block(int fd, int block, char **line, t_rt *rt)
+{
+	char			*sub_line;
+	char			**arr;
 	t_sub_parser	sub;
 
-
-	ft_bzero(&shape, sizeof(t_shape));
-	while (get_next_line(fd, line))
+	ft_bzero((void **)&sub, sizeof(t_sub_parser));
+	sub.fr = -1;
+	sub_line = ft_strtrim(*line);
+	ft_strdel(line);
+	while ((sub_line && sub_line[0] != '[') && sub.fr != 0)
 	{
-		sub_line = ft_strtrim(*line);
-		if (sub_line[0] == '[')
-		{
-			free(sub_line);
-			// fill_block(block, rt, &sub);
-			return ;
-		}
-		free(*line);
 		arr = ft_strsplit(sub_line, '=');
-		free(sub_line);
-		i = 0;
+		ft_strdel(&sub_line);
 		if ((ft_arrlen((void **)arr) == 2))
 		{
+			ft_strdel(line);
 			*line = ft_strtrim(arr[0]);
-			if (ft_strequ(*line,"opoint"))
-			{
-				arr_sub = ft_strsplit(arr[1], ',');
-				sub.opoint = (t_vec3){.x = atof(arr_sub[0]) , .y = atof(arr_sub[1]), .z = atof(arr_sub[2])};
-				ft_free_split(arr_sub);
-			}
-			if (ft_strequ(*line,"rot"))
-			{
-				arr_sub = ft_strsplit(arr[1], ',');
-				sub.rot = (t_vec3){.x = atof(arr_sub[0]) , .y = atof(arr_sub[1]), .z = atof(arr_sub[2])};
-				ft_free_split(arr_sub);
-			}
-			else if (ft_strequ(*line,"center"))
-			{
-				arr_sub = ft_strsplit(arr[1], ',');
-				sub.center = (t_vec3){.x = atof(arr_sub[0]) , .y = atof(arr_sub[1]), .z = atof(arr_sub[2])};
-				ft_free_split(arr_sub);
-			}
-			else if (ft_strequ(*line,"axis"))
-			{
-				arr_sub = ft_strsplit(arr[1], ',');
-				sub.axis = (t_vec3){.x = atof(arr_sub[0]) , .y = atof(arr_sub[1]), .z = atof(arr_sub[2])};
-				ft_free_split(arr_sub);
-			}
-			else if (ft_strequ(*line,"color"))
-			{
-				arr_sub = ft_strsplit(arr[1], ',');
-				sub.color = (t_color){.red = (uint8_t)atoi(arr_sub[0]), .green = (uint8_t)atoi(arr_sub[1]), .blue = (uint8_t)atoi(arr_sub[2])};
-				ft_free_split(arr_sub);
-			}
-			else if (ft_strequ(*line,"norm"))
-			{
-				arr_sub = ft_strsplit(arr[1], ',');
-				sub.norm = (t_vec3){.x = atof(arr_sub[0]), .y = atof(arr_sub[1]), .z = atof(arr_sub[2])};
-				ft_free_split(arr_sub);
-			}
-			else if (ft_strequ(*line,"rad"))
-				sub.rad = atof(arr[1]);		
-			else if (ft_strequ(*line,"specular"))
-				sub.specular = atof(arr[1]);	
-			else if (ft_strequ(*line,"type"))
-				sub.type = atof(arr[1]);	
-			else if (ft_strequ(*line,"intens"))
-				sub.intens = atof(arr[1]);	
-			else if (ft_strequ(*line,"on"))
-				sub.on = atoi(arr[1]);
-			else if (ft_strequ(*line,"angle"))
-				sub.angle = atof(arr[1]);	
-			ft_free_split(arr);
-		ft_free_split(arr);
+			fill_parse_var(&sub, *line, arr[1]);
 		}
+		ft_free_split(arr);
+		ft_strdel(line);
+		sub.fr = get_next_line(fd, line);
+		sub_line = ft_strtrim(*line);
 	}
+	ft_strdel(&sub_line);
+	fill_block(block, rt, sub);
 }
 
-int		parse_fail(char *file_name,t_rt *rt)
+int			parse_change_block(char *line)
 {
-	int		fd;
-	char	*line;
 	char	*sub_line;
 	int		block;
 
+	block = 0;
+	if ((sub_line = ft_strtrim(line)))
+	{
+		if (ft_strncmp(line, SPHERE_T, ft_strlen(SPHERE_T)) == 0)
+			block = SPHERE;
+		else if (ft_strncmp(line, CYLINDER_T, ft_strlen(CYLINDER_T)) == 0)
+			block = CYLINDER;
+		else if (ft_strncmp(line, CONE_T, ft_strlen(CONE_T)) == 0)
+			block = CONE;
+		else if (ft_strncmp(line, PLANE_T, ft_strlen(PLANE_T)) == 0)
+			block = PLANE;
+		else if (ft_strncmp(line, LIGHT_T, ft_strlen(LIGHT_T)) == 0)
+			block = LIGHT;
+		else if (ft_strncmp(line, CAM_T, ft_strlen(CAM_T)) == 0)
+			block = CAM;
+		ft_strdel(&sub_line);
+	}
+	return (block);
+}
+
+int			parse_fail(char *file_name, t_rt *rt)
+{
+	int		fd;
+	char	*line;
+	int		block;
+
 	fd = open(file_name, O_RDONLY);
+	rt->max_light = 0;
+	rt->max_shape = 0;
 	blocks_count(file_name, &rt->max_shape, &rt->max_light);
 	rt->shapes = (t_shape*)malloc(sizeof(t_shape) * rt->max_shape);
 	rt->light = (t_light*)malloc(sizeof(t_light) * rt->max_light);
-	ft_bzero(rt->shapes,sizeof(t_shape) * rt->max_shape);
-	ft_bzero(rt->light,sizeof(t_light) * rt->max_light);
+	ft_bzero(rt->shapes, sizeof(t_shape) * rt->max_shape);
+	ft_bzero(rt->light, sizeof(t_light) * rt->max_light);
 	block = 0;
 	while (get_next_line(fd, &line))
 	{
 		if (block != 0)
 			parse_block(fd, block, &line, rt);
-		sub_line = ft_strtrim(line);
-		block = 0;
-		free(line);
-		if (ft_strncmp(line,SPHERE_T,ft_strlen(SPHERE_T)) == 0)
-			block = SPHERE;
-		else if (ft_strncmp(line,CYLINDER_T,ft_strlen(CYLINDER_T)) == 0)
-			block = CYLINDER;
-		else if (ft_strncmp(line,CONE_T,ft_strlen(CONE_T)) == 0)
-			block = CONE;
-		else if (ft_strncmp(line,PLANE_T,ft_strlen(PLANE_T)) == 0)
-			block = PLANE;
-		else if (ft_strncmp(line,LIGHT_T,ft_strlen(LIGHT_T)) == 0)
-			block = LIGHT;
-		else if (ft_strncmp(line,CAM_T,ft_strlen(CAM_T)) == 0)
-			block = CAM;
-		free(sub_line);
+		block = parse_change_block(line);
+		ft_strdel(&line);
 	}
-	return(0);
+	close(fd);
+	return (0);
 }
-
-
-
-int main()
-{
-	t_rt	rt;
-	parse_fail("map.ini", &rt);
-	return(0);
-}
-

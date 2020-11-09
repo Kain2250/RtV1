@@ -3,142 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eboris <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/19 14:05:35 by eboris            #+#    #+#             */
-/*   Updated: 2019/09/30 15:13:52 by eboris           ###   ########.fr       */
+/*   Created: 2020/11/10 00:30:53 by ecelsa            #+#    #+#             */
+/*   Updated: 2020/11/10 00:31:07 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
-static int		gnl_read_file(t_list *list)
+int		ft_new_line(char **s, char **line, int fd, int ret)
 {
-	int		read_result;
-	char	*text;
+	char	*tmp;
+	int		len;
 
-	if (list->content != NULL)
+	len = 0;
+	while (s[fd][len] != '\n' && s[fd][len] != '\0')
+		len++;
+	if (s[fd][len] == '\n')
 	{
-		free(list->content);
-		list->content = NULL;
+		*line = ft_strsub(s[fd], 0, len);
+		tmp = ft_strdup(s[fd] + len + 1);
+		free(s[fd]);
+		s[fd] = tmp;
+		if (s[fd][0] == '\0')
+			ft_strdel(&s[fd]);
 	}
-	if ((text = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1))) == NULL)
-		return (-1);
-	read_result = read(list->content_size, text, BUFF_SIZE);
-	if (read_result < 1)
+	else if (s[fd][len] == '\0')
 	{
-		ft_strdel(&text);
-		return (read_result);
+		if (ret == BUFF_SIZE)
+			return (get_next_line(fd, line));
+		*line = ft_strdup(s[fd]);
+		ft_strdel(&s[fd]);
 	}
-	text[read_result] = '\0';
-	if ((list->content = ft_memalloc(read_result + 1)) == NULL)
-		return (-1);
-	list->content = ft_memcpy(list->content, text, (read_result + 1));
-	ft_strdel(&text);
-	return (read_result);
-}
-
-static int		gnl_write_string(char *text, char **line, t_list *list)
-{
-	char	*temp;
-	char	*temp2;
-	int		i;
-
-	if ((text == NULL) || (text[0] == '\0'))
-		return (0);
-	else if (ft_strstr(text, "\n") == NULL)
-	{
-		free(list->content);
-		list->content = NULL;
-		*line = text;
-		return (1);
-	}
-	i = ft_strlen(ft_strstr(text, "\n"));
-	temp = ft_strsub(text, 0, ft_strlen(text) - i);
-	*line = temp;
-	temp2 = ft_strsub(text, ft_strlen(text) - i + 1, i - 1);
-	ft_strdel(&text);
-	free(list->content);
-	if ((list->content = ft_memalloc(i)) == NULL)
-		return (-1);
-	list->content = ft_memcpy(list->content, temp2, i);
-	ft_strdel(&temp2);
 	return (1);
 }
 
-static int		gnl_read_string(t_list *list, char **line)
+int		get_next_line(const int fd, char **line)
 {
-	int		f_read;
-	char	*text;
-	char	*temp;
+	static char	*s[255];
+	char		buf[BUFF_SIZE + 1];
+	char		*tmp;
+	int			ret;
 
-	text = NULL;
-	f_read = 1;
-	while (f_read > 0)
-	{
-		if ((text == NULL) && (list->content != NULL))
-			text = ft_strdup(list->content);
-		else if ((text != NULL) && (list->content != NULL))
-		{
-			temp = ft_strjoin(text, list->content);
-			ft_strdel(&text);
-			text = temp;
-		}
-		if ((text != NULL) && ((ft_strstr(text, "\n")) || (f_read == 0)))
-		{
-			f_read = gnl_write_string(text, line, list);
-			return (f_read);
-		}
-		f_read = gnl_read_file(list);
-	}
-	f_read = gnl_write_string(text, line, list);
-	return (f_read);
-}
-
-static t_list	*gnl_find_list(int fd)
-{
-	static t_list	*first_list;
-	t_list			*temp;
-	t_list			*new;
-
-	if (first_list == NULL)
-	{
-		if ((first_list = ft_lstnew(NULL, 0)) == NULL)
-			return (NULL);
-		first_list->content_size = fd;
-	}
-	temp = first_list;
-	while (temp != NULL)
-		if ((int)temp->content_size == fd)
-			return (temp);
-		else if (temp->next != NULL)
-			temp = temp->next;
-		else
-		{
-			if ((new = ft_lstnew(NULL, 0)) == NULL)
-				return (NULL);
-			temp->next = new;
-			new->content_size = fd;
-		}
-	return (NULL);
-}
-
-int				get_next_line(const int fd, char **line)
-{
-	t_list	*list;
-	char	a;
-	int		exit_code;
-
-	if ((line == NULL) || (fd < 0) || (read(fd, &a, 0) < 0))
+	if (fd < 0 || line == NULL)
 		return (-1);
-	list = gnl_find_list(fd);
-	if (!(list))
-		return (-1);
-	exit_code = gnl_read_string(list, line);
-	if ((exit_code == 0) && (list))
+	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		free(list->content);
-		list->content = NULL;
+		buf[ret] = '\0';
+		if (s[fd] == NULL)
+			s[fd] = ft_strnew(1);
+		tmp = ft_strjoin(s[fd], buf);
+		free(s[fd]);
+		s[fd] = tmp;
+		if (ft_strchr(buf, '\n'))
+			break ;
 	}
-	return (exit_code);
+	if (ret < 0)
+		return (-1);
+	else if (ret == 0 && (s[fd] == NULL || s[fd][0] == '\0'))
+		return (0);
+	return (ft_new_line(s, line, fd, ret));
 }

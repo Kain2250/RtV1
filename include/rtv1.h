@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/09 16:35:29 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 02:34:38 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,23 @@
 # include "colors.h"
 # include <stdbool.h>
 # include <math.h>
+
+# define GET_SECTIONS 1
+# define GET_PAPARAM 2
+
+# define SPHERE 1
+# define CYLINDER 2
+# define CONE 3
+# define PLANE 4
+# define LIGHT 5
+# define CAM 6
+
+# define SPHERE_T "[sphere]"
+# define CYLINDER_T "[cylinder]"
+# define CONE_T "[cone]"
+# define PLANE_T "[plane]"
+# define LIGHT_T "[light]"
+# define CAM_T "[cam]"
 
 # define WIN_WIDTH 600
 # define WIN_HEIGHT 600
@@ -110,6 +127,7 @@ typedef struct		s_sdl
 
 typedef struct		s_shape
 {
+	int				fil;
 	uint8_t			type;
 	t_vec3			center;
 	double			specular;
@@ -141,6 +159,7 @@ typedef struct		s_cam
 
 typedef struct		s_light
 {
+	int				fil;
 	t_vec3			dir;
 	double			intens;
 	uint8_t			type;
@@ -204,7 +223,10 @@ typedef struct		s_sub_parser
 	int			type;
 	double		intens;
 	bool		on;
+	int			fr;
 }					t_sub_parser;
+
+
 
 typedef struct		s_intersect
 {
@@ -214,8 +236,6 @@ typedef struct		s_intersect
 	t_color			color;
 	double			shine;
 }					t_intersect;
-
-int					main(void);
 
 void				cache_cam(t_rt *rt);
 
@@ -278,5 +298,15 @@ bool				shadow_calc(t_light light, t_intersect itr,
 t_intersect			ray_intersect(t_vec3 dir, t_vec3 opoint,
 						t_shape *shape, int count_shape);
 t_color				shine_calc(t_shine s);
+
+int					parse_fail(char *file_name,t_rt *rt);
+t_shape				create_sphere(t_sub_parser data);
+t_shape				create_plane(t_sub_parser data);
+t_shape				create_cone(t_sub_parser data);
+t_shape				create_cilinder(t_sub_parser data);
+t_light				create_light_point(t_sub_parser data, int max_light);
+t_light				create_light_ambient(t_sub_parser data, int max_light);
+void				create_cam(t_rt *rt, t_sub_parser data);
+
 
 #endif

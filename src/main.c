@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/10 17:47:59 by ecelsa           ###   ########.fr       */
+/*   Updated: 2020/11/10 18:33:42 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,7 @@ int			main(int argc, char **argv)
 		}
 		rt_free(rt);
 	}
+	else
+		put_error_sys("Sorry... Arg invalide");
 	return (0);
 }

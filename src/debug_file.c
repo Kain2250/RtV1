@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 08:33:00 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/04 16:43:25 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 18:41:20 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 void	rt_free(t_rt *rt)
 {
+	if (rt->light)
+		free(rt->light);
+	if (rt->shapes)
+		free(rt->shapes);
 	SDL_DestroyRenderer(rt->sdl.screen);
 	SDL_DestroyWindow(rt->sdl.window);
 	free(rt);

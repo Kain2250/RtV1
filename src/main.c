@@ -6,7 +6,7 @@
 /*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/10 18:33:42 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 21:22:49 by bdrinkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,8 @@ int			main(int argc, char **argv)
 		init_lib_sdl(rt);
 		if (!(parse_fail(argv[1], rt)))
 		{
-			ft_putstr("Map file not norm\n");
 			rt_free(rt);
-			return (0);
+			return (put_error_sys("Map file not norm"));
 		}
 		cache_cam(rt);
 		while (rt->quit != true)

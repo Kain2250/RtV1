@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+         #
+#    By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/21 19:14:26 by kain2250          #+#    #+#              #
-#    Updated: 2020/11/10 00:14:34 by ecelsa           ###   ########.fr        #
+#    Updated: 2020/11/10 21:36:45 by bdrinkin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,18 +15,14 @@ NAME = rtv1
 
 # Флаги компиляции:
 GCC = gcc -g
-CCFLAGS = -Wall -Wextra -Werror -O0
-OTHERS_FLAGS = -lm -lft #-lSDL2 -lSDL2_image -lSDL2_ttf
+CCFLAGS = -Wall -Wextra -Werror -O2
+OTHERS_FLAGS = -lm -lft
 # Список фреймворков и их пути:
 FRAME_SDL2_DIR = Frameworks
 FRAME_SDL2 = $(FRAME_SDL2_DIR)/SDL2.framework
 FRAME_SDL2_IMAGE = $(FRAME_SDL2_DIR)/SDL2_image.framework
 FRAME_SDL2_TTF = $(FRAME_SDL2_DIR)/SDL2_ttf.framework
 
-# ifeq ($(shell uname), Linux)
-# 	FRAMEWORKS = -L /usr/bin/
-# 	INCLUDES_SDL2 = -I /usr/local/include/
-# else
 FRAMEWORKS = -F Frameworks \
 	-framework SDL2 \
 	-framework SDL2_image \

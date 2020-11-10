@@ -6,7 +6,7 @@
 /*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:30:14 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/10 00:23:51 by ecelsa           ###   ########.fr       */
+/*   Updated: 2020/11/10 17:47:59 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,12 @@ int			main(int argc, char **argv)
 	{
 		rt = ft_memalloc(sizeof(t_rt));
 		init_lib_sdl(rt);
-		// init_cam(rt);
-		parse_fail(argv[1], rt);
+		if (!(parse_fail(argv[1], rt)))
+		{
+			ft_putstr("Map file not norm\n");
+			rt_free(rt);
+			return (0);
+		}
 		cache_cam(rt);
 		while (rt->quit != true)
 		{

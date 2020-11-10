@@ -6,7 +6,7 @@
 /*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 19:19:41 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/10 00:31:36 by ecelsa           ###   ########.fr       */
+/*   Updated: 2020/11/10 17:06:09 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 # define INT_MAX 2147483647
 # define INT_MIN -214748368
-# define BUFF_SIZE 1000
+# ifndef BUFF_SIZE
+#  define BUFF_SIZE 4096
+# endif
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -207,6 +209,7 @@ int					ft_atoi(const char *str);
 /*
 ** Смотри ft_atoi (добавлена поддержка иных систем счисления)
 */
+double				ft_atof(char *num);
 int					ft_atoi_base(const char *str, int base);
 /*
 ** озвращает ненулевое значение,

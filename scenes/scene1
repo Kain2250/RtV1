@@ -1,110 +1,32 @@
-rt->shapes[i].center = (t_vec3){-6., -5., 0.};
-rt->shapes[i].color = (t_color){0, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
+void		init_cam(t_rt *rt)
+{
+	int	i;
 
-rt->shapes[i].center = (t_vec3){6., -5., 0.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){-6., 5., 0.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){6., 5., 0.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){-6., -5., 18.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){6., -5., 18.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){-6., 5., 18.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 1.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){6., 5., 18.};
-rt->shapes[i].color = (t_color){144, 77, 48};
-rt->shapes[i].rad = 2.;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){0., -3., 0.};
-rt->shapes[i].color = (t_color){255, 77, 48};
-rt->shapes[i].rad = 0.5;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_sphere;
-
-rt->shapes[i].center = (t_vec3){6., 0., 18.};
-rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
-rt->shapes[i].color = (t_color){25, 100, 5}; 
-rt->shapes[i].rad = 1.f;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_cilindr;
-
-rt->shapes[i].center = (t_vec3){-6., 0., 18.};
-rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
-rt->shapes[i].color = (t_color){25, 100, 5}; 
-rt->shapes[i].rad = 1.f;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_cilindr;
-
-rt->shapes[i].center = (t_vec3){6., 0., 0.};
-rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
-rt->shapes[i].color = (t_color){25, 100, 5}; 
-rt->shapes[i].rad = 1.f;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_cilindr;
-
-rt->shapes[i].center = (t_vec3){-6., 0., 0.};
-rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
-rt->shapes[i].color = (t_color){25, 100, 5}; 
-rt->shapes[i].rad = 1.f;
-rt->shapes[i].specular = 10.;
-rt->shapes[i++].type = e_cilindr;
-
-rt->shapes[i].center = (t_vec3){0., 1., 29.};
-rt->shapes[i].color = (t_color){49, 127, 67};
-rt->shapes[i].rad = INFINITY;
-rt->shapes[i].specular = 0;
-rt->shapes[i].norm = (t_vec3){0., 0., -1.};
-rt->shapes[i++].type = e_plane;
-
-rt->shapes[i].center = (t_vec3){0., -5., 0.};
-rt->shapes[i].color = (t_color){121, 85, 61};
-rt->shapes[i].rad = INFINITY;
-rt->shapes[i].specular = 0;
-rt->shapes[i].norm = (t_vec3){0., 1., 0.};
-rt->shapes[i++].type = e_plane;
-
-rt->shapes[i].center = (t_vec3){0., 5., 0.};
-rt->shapes[i].color = (t_color){204, 204, 255};
-rt->shapes[i].rad = INFINITY;
-rt->shapes[i].specular = 0;
-rt->shapes[i].norm = (t_vec3){0., -1., 0.};
-rt->shapes[i++].type = e_plane;
-
-rt->shapes[i].center = (t_vec3){0., 0., 0.};
-rt->shapes[i].axis = normalize((t_vec3){0., 1., 0.});
-rt->shapes[i].color = (t_color){0, 100, 150};
-rt->shapes[i].k = tan(M_PI_2 / 6);
-rt->shapes[i].pow_k = rt->shapes[i].k * rt->shapes[i].k;
-rt->shapes[i].specular = 0;
-rt->shapes[i++].type = e_conus;
+	i = 0;
+	rt->max_shape = 17;
+	rt->shapes = ft_memalloc(sizeof(t_shape) * rt->max_shape);
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){-6., -5., 0.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){6., -5., 0.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){-6., 5., 0.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){6., 5., 0.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){-6., -5., 18.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){6., -5., 18.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){-6., 5., 18.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){6., 5., 18.}, .color = BROWN_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_sphere((t_sub_parser){.center = (t_vec3){-2., 0., 0.}, .color = RED_COLOR, .rad = 1.5, .specular = 10.});
+	rt->shapes[i++] = create_cilinder((t_sub_parser){.center = (t_vec3){6., 0., 18.}, .rad = 1., .axis = (t_vec3){0., 1., 0.}, .color = L_GREEN_COLOR, .specular = 10.});
+	rt->shapes[i++] = create_cilinder((t_sub_parser){.center = (t_vec3){-6., 0., 18.}, .rad = 1., .axis = (t_vec3){0., 1., 0.}, .color = L_GREEN_COLOR, .specular = 10.});
+	rt->shapes[i++] = create_cilinder((t_sub_parser){.center = (t_vec3){6., 0., 0.}, .rad = 1., .axis = (t_vec3){0., 1., 0.}, .color = L_GREEN_COLOR, .specular = 10.});
+	rt->shapes[i++] = create_cilinder((t_sub_parser){.center = (t_vec3){-6., 0., 0.}, .rad = 1., .axis = (t_vec3){0., 1., 0.}, .color = L_GREEN_COLOR, .specular = 10.});
+	rt->shapes[i++] = create_plane((t_sub_parser){.center = (t_vec3){0., 1., 29.}, .color = BLUE_COLOR, .norm = (t_vec3){0., 0., -1.}, .specular = 0});
+	rt->shapes[i++] = create_plane((t_sub_parser){.center = (t_vec3){0., -5., 0.}, .color = PURPLE_COLOR, .norm = (t_vec3){0., 1., 0.}, .specular = 0});
+	rt->shapes[i++] = create_plane((t_sub_parser){.center = (t_vec3){0., 5., 0.}, .color = YELLOW_COLOR, .norm = (t_vec3){0., -1., 0.}, .specular = 0});
+	rt->shapes[i++] = create_cone((t_sub_parser){.center = (t_vec3){0., 0., 0.}, .angle = -1000, .axis = (t_vec3){0., 1., 0.}, .color = WHIGHT_COLOR, .specular = 10.});
+	rt->max_light = 3;
+	rt->light = ft_memalloc(sizeof(t_light) * rt->max_light);
+	i = 0;
+	rt->light[i++] = create_light_point((t_sub_parser){.opoint = (t_vec3){-20, 3, -20}, .intens = 0.4}, rt->max_light);
+	rt->light[i++] = create_light_point((t_sub_parser){.opoint = (t_vec3){20, 3, -20}, .intens = 0.5}, rt->max_light);
+	rt->light[i++] = create_light_ambient((t_sub_parser){.intens = 0.2}, rt->max_light);
+	create_cam(rt, (t_sub_parser){.rot = (t_vec3){0, 0, 0}, .opoint = (t_vec3){0., 0., -20.}});
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 14:05:48 by eboris            #+#    #+#             */
-/*   Updated: 2020/02/09 05:53:07 by bdrinkin         ###   ########.fr       */
+/*   Updated: 2020/11/10 17:06:56 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # include <unistd.h>
 # include "libft.h"
 
-# define BUFF_SIZE 6000
+# ifndef BUFF_SIZE
+#  define BUFF_SIZE 6000
+# endif
 
 int					get_next_line(const int fd, char **line);
 #endif

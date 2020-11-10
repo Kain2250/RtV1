@@ -6,7 +6,7 @@
 /*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:32:46 by bdrinkin          #+#    #+#             */
-/*   Updated: 2020/11/10 02:34:38 by ecelsa           ###   ########.fr       */
+/*   Updated: 2020/11/10 17:59:24 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,6 @@ typedef struct		s_sub_parser
 	int			fr;
 }					t_sub_parser;
 
-
-
 typedef struct		s_intersect
 {
 	t_vec3			intersect;
@@ -299,7 +297,7 @@ t_intersect			ray_intersect(t_vec3 dir, t_vec3 opoint,
 						t_shape *shape, int count_shape);
 t_color				shine_calc(t_shine s);
 
-int					parse_fail(char *file_name,t_rt *rt);
+int					parse_fail(char *file_name, t_rt *rt);
 t_shape				create_sphere(t_sub_parser data);
 t_shape				create_plane(t_sub_parser data);
 t_shape				create_cone(t_sub_parser data);
@@ -307,6 +305,5 @@ t_shape				create_cilinder(t_sub_parser data);
 t_light				create_light_point(t_sub_parser data, int max_light);
 t_light				create_light_ambient(t_sub_parser data, int max_light);
 void				create_cam(t_rt *rt, t_sub_parser data);
-
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ecelsa <ecelsa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 16:58:48 by ecelsa            #+#    #+#             */
-/*   Updated: 2020/11/10 17:11:07 by ecelsa           ###   ########.fr       */
+/*   Updated: 2020/11/10 18:41:01 by ecelsa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ double		ft_atof(char *num)
 			i++;
 		}
 		ft_atof_sub(&i, line, &f);
+		free(line);
 		return (f * flag);
 	}
 	return (0);

@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "sdl2": "c",
-        "__locale": "c"
-    },
-    "editor.rulers": [80]
-}

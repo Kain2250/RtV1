@@ -6,7 +6,7 @@
 #    By: bdrinkin <bdrinkin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/21 19:14:26 by kain2250          #+#    #+#              #
-#    Updated: 2020/11/10 21:36:45 by bdrinkin         ###   ########.fr        #
+#    Updated: 2020/11/10 21:58:27 by bdrinkin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 NAME = rtv1
 
 # Флаги компиляции:
-GCC = gcc -g
+GCC = gcc
 CCFLAGS = -Wall -Wextra -Werror -O2
 OTHERS_FLAGS = -lm -lft
 # Список фреймворков и их пути:
@@ -73,18 +73,18 @@ all: $(NAME)
 
 $(NAME): $(LIBFT_DIRECTORY) $(SRC) $(HEADERS)
 	@$(MAKE) -C $(LIBFT_DIRECTORY)
-	@echo "wolf3d: $(GREEN)Компиляция исполняемого файла$(RESET)\n"
+	@echo "rtv1: $(GREEN)Компиляция исполняемого файла$(RESET)\n"
 	@$(GCC) $(CCFLAGS) $(SRC) $(INCLUDES) $(LIBRARIES_LIBFT) $(FRAMEWORKS) $(OTHERS_FLAGS) -o $(NAME)
-	@echo "wolf3d: $(GREEN)Компиляция завершена$(RESET)\n"
+	@echo "rtv1: $(GREEN)Компиляция завершена$(RESET)\n"
 
 $(LIBFT_DIRECTORY):
 	@$(MAKE) -C $(LIBFT_DIRECTORY)
 
 debug: $(LIBFT_DIRECTORY) $(SRC) $(HEADERS)
 	@$(MAKE) -C $(LIBFT_DIRECTORY)
-	@echo "wolf3d: $(GREEN)Компиляция исполняемого файла$(RESET)\n"
+	@echo "rtv1: $(GREEN)Компиляция исполняемого файла$(RESET)\n"
 	@$(GCC) -g $(CCFLAGS) $(SRC) $(INCLUDES) $(LIBRARIES_LIBFT) $(FRAMEWORKS) $(OTHERS_FLAGS) -o $(NAME)
-	@echo "wolf3d: $(GREEN)Компиляция завершена$(RESET)\n"
+	@echo "rtv1: $(GREEN)Компиляция завершена$(RESET)\n"
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIRECTORY) clean
